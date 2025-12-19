@@ -1,36 +1,44 @@
 import { Home, MessageSquare, Users, FolderPlus, Mail, Settings } from "lucide-react";
+import { useLocation } from "wouter";
 
 export const DashboardPage = (): JSX.Element => {
+  const [, setLocation] = useLocation();
+
   const dashboardCards = [
     {
       title: "Campaign",
       description: "View and create campaign",
       bgColor: "bg-[#83ffb333]",
       icon: FolderPlus,
+      path: "/campaign",
     },
     {
       title: "Project requests",
       description: "Approved or reject projects",
       bgColor: "bg-[#ff78d233]",
       icon: Mail,
+      path: "#",
     },
     {
       title: "Message",
       description: "Communicate with team members and clients",
       bgColor: "bg-[#7974ffcc]",
       icon: MessageSquare,
+      path: "/message",
     },
     {
       title: "Manage users",
       description: "Assign task and role allocation for employees",
       bgColor: "bg-[#7dffff33]",
       icon: Users,
+      path: "#",
     },
     {
       title: "Tools",
       description: "Access evaluation, etc",
       bgColor: "bg-[#ff7d8e33]",
       icon: Settings,
+      path: "#",
     },
   ];
 
@@ -59,17 +67,17 @@ export const DashboardPage = (): JSX.Element => {
       <main className="flex-1 px-[109px] pt-[181px]">
         <div className="grid grid-cols-5 gap-[50px] mb-[50px]">
           {dashboardCards.map((card, index) => (
-            <a
+            <button
               key={index}
-              href="#"
+              onClick={() => card.path !== "#" && setLocation(card.path)}
               data-testid={`card-${card.title.toLowerCase().replace(/\s+/g, '-')}`}
-              className={`${card.bgColor} rounded-[10px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] p-6 flex flex-col items-center text-center hover-elevate transition-all duration-200`}
+              className={`${card.bgColor} rounded-[10px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] p-6 flex flex-col items-center text-center hover-elevate transition-all duration-200 cursor-pointer`}
               style={{ width: "218px", minHeight: "146px" }}
             >
               <card.icon size={70} className="text-black mb-4" />
               <h3 className="text-black font-semibold text-2xl font-playfair mb-2">{card.title}</h3>
               <p className="text-black text-base font-playfair">{card.description}</p>
-            </a>
+            </button>
           ))}
         </div>
 
