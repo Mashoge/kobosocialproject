@@ -80,8 +80,8 @@ export const LogInPage = (): JSX.Element => {
                 <ArrowRightIcon className="ml-2 w-5 h-5" />
               </Button>
 
-              <div className="w-[340px] h-[60px] mt-[27px] relative">
-                <p className="absolute top-0 left-0 w-[253px] [font-family:'Playfair_Display',Helvetica] font-normal text-black text-xl text-center tracking-[0] leading-[26.6px]">
+              <div className="w-[340px] mt-[27px] flex flex-col gap-2">
+                <p className="[font-family:'Playfair_Display',Helvetica] font-normal text-black text-xl text-center tracking-[0] leading-[26.6px]">
                   Don&apos;t have an account yet?{" "}
                   <a
                     href="#"
@@ -91,7 +91,7 @@ export const LogInPage = (): JSX.Element => {
                   </a>
                 </p>
 
-                <p className="absolute top-[33px] left-2.5 w-full [font-family:'Playfair_Display',Helvetica] font-normal text-black text-xl text-center tracking-[0] leading-[26.6px]">
+                <p className="[font-family:'Playfair_Display',Helvetica] font-normal text-black text-xl text-center tracking-[0] leading-[26.6px]">
                   Can&apos;t log in?{" "}
                   <a
                     href="#"
