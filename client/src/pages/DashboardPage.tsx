@@ -1,15 +1,12 @@
 import { Home, MessageSquare, Users, FolderPlus, Mail, Settings } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
 
 export const DashboardPage = (): JSX.Element => {
-  const navigate = useNavigate();
   const dashboardCards = [
     {
       title: "Campaign",
       description: "View and create campaign",
       bgColor: "bg-[#83ffb333]",
       icon: FolderPlus,
-      route: "/campaign"
     },
     {
       title: "Project requests",
@@ -64,8 +61,7 @@ export const DashboardPage = (): JSX.Element => {
           {dashboardCards.map((card, index) => (
             <a
               key={index}
-              href={card.route}
-              onClick={() => card.route && navigate(card.route)}
+              href="#"
               data-testid={`card-${card.title.toLowerCase().replace(/\s+/g, '-')}`}
               className={`${card.bgColor} rounded-[10px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] p-6 flex flex-col items-center text-center hover-elevate transition-all duration-200`}
               style={{ width: "218px", minHeight: "146px" }}
