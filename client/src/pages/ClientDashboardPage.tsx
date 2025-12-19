@@ -1,8 +1,27 @@
-import { Home, MessageSquare, FileText, CheckSquare } from "lucide-react";
+import { Home, MessageSquare, FileText, CheckSquare, LogOut } from "lucide-react";
 import { useLocation } from "wouter";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 export const ClientDashboardPage = (): JSX.Element => {
   const [, setLocation] = useLocation();
+
+  const handleLogout = () => {
+    setLocation("/");
+  };
+
+  const projectOverviewData = [
+    { name: "Jan", completed: 4, pending: 2 },
+    { name: "Feb", completed: 3, pending: 3 },
+    { name: "Mar", completed: 5, pending: 1 },
+    { name: "Apr", completed: 6, pending: 0 },
+    { name: "May", completed: 4, pending: 2 },
+  ];
+
+  const projectStatusData = [
+    { name: "Active", value: 8 },
+    { name: "Pending", value: 3 },
+    { name: "Completed", value: 12 },
+  ];
 
   const dashboardCards = [
     {
@@ -43,6 +62,14 @@ export const ClientDashboardPage = (): JSX.Element => {
             <MessageSquare size={24} className="text-black" />
             <span className="text-black text-lg font-playfair">Message</span>
           </button>
+          <button 
+            onClick={handleLogout}
+            className="flex items-center gap-2 cursor-pointer hover:opacity-70" 
+            data-testid="button-logout-client"
+          >
+            <LogOut size={24} className="text-black" />
+            <span className="text-black text-lg font-playfair">Logout</span>
+          </button>
         </div>
       </header>
 
@@ -69,7 +96,19 @@ export const ClientDashboardPage = (): JSX.Element => {
                 Project Overview
               </h2>
             </div>
-            <div className="h-[553px]" data-testid="section-project-overview"></div>
+            <div className="h-[553px] p-6 flex items-center justify-center" data-testid="section-project-overview">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={projectOverviewData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="completed" fill="#83ffb3" />
+                  <Bar dataKey="pending" fill="#ff78d2" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
           <div className="bg-white rounded-[10px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] overflow-hidden">
@@ -78,7 +117,24 @@ export const ClientDashboardPage = (): JSX.Element => {
                 Project Status
               </h2>
             </div>
-            <div className="h-[553px]" data-testid="section-project-status"></div>
+            <div className="h-[553px] p-6 flex flex-col justify-center" data-testid="section-project-status">
+              <div className="space-y-4">
+                {projectStatusData.map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between">
+                    <span className="text-gray-700 font-semibold">{item.name}</span>
+                    <div className="flex items-center gap-4">
+                      <div className="w-48 bg-gray-200 rounded-full h-2">
+                        <div 
+                          className="bg-blue-500 h-2 rounded-full" 
+                          style={{ width: `${(item.value / 12) * 100}%` }}
+                        />
+                      </div>
+                      <span className="text-gray-800 font-bold w-8">{item.value}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </main>

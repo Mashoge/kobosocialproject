@@ -1,5 +1,6 @@
 import { Home, MessageSquare, Users, FolderPlus, Mail, Settings, LogOut } from "lucide-react";
 import { useLocation } from "wouter";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from "recharts";
 
 export const DashboardPage = (): JSX.Element => {
   const [, setLocation] = useLocation();
@@ -7,6 +8,20 @@ export const DashboardPage = (): JSX.Element => {
   const handleLogout = () => {
     setLocation("/");
   };
+
+  const projectOverviewData = [
+    { name: "Week 1", projects: 5, tasks: 12 },
+    { name: "Week 2", projects: 8, tasks: 18 },
+    { name: "Week 3", projects: 6, tasks: 14 },
+    { name: "Week 4", projects: 9, tasks: 22 },
+  ];
+
+  const analyticsData = [
+    { name: "Campaign A", performance: 65 },
+    { name: "Campaign B", performance: 78 },
+    { name: "Campaign C", performance: 92 },
+    { name: "Campaign D", performance: 73 },
+  ];
 
   const dashboardCards = [
     {
@@ -100,7 +115,19 @@ export const DashboardPage = (): JSX.Element => {
                 Project Overview
               </h2>
             </div>
-            <div className="h-[553px]" data-testid="section-project-overview"></div>
+            <div className="h-[553px] p-6 flex items-center justify-center" data-testid="section-project-overview">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={projectOverviewData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="projects" fill="#83ffb3" />
+                  <Bar dataKey="tasks" fill="#7974ff" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
           <div className="bg-white rounded-[10px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] overflow-hidden">
@@ -109,7 +136,18 @@ export const DashboardPage = (): JSX.Element => {
                 Analytics Overview
               </h2>
             </div>
-            <div className="h-[553px]" data-testid="section-analytics-overview"></div>
+            <div className="h-[553px] p-6 flex items-center justify-center" data-testid="section-analytics-overview">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={analyticsData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="performance" stroke="#ff78d2" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       </main>
