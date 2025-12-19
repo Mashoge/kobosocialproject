@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronRight, X } from "lucide-react";
+import { ChevronRight, X, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 
@@ -113,7 +113,15 @@ export const CreateTemplatePage = (): JSX.Element => {
   if (step === "name" && selectedTemplate) {
     return (
       <div className="bg-[#f5f5f5] w-full min-h-screen flex flex-col">
-        <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center px-10">
+        <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center justify-between px-10">
+          <button
+            onClick={() => setLocation("/dashboard")}
+            className="flex items-center gap-2 text-black hover:opacity-70"
+            data-testid="button-home-template"
+          >
+            <Home size={24} />
+            <span className="font-playfair">Home</span>
+          </button>
           <button
             onClick={() => setLocation("/campaign")}
             className="text-black text-sm font-playfair hover:opacity-70 flex items-center gap-2"
@@ -193,7 +201,15 @@ export const CreateTemplatePage = (): JSX.Element => {
   if (step === "preview" && selectedTemplate) {
     return (
       <div className="bg-[#f5f5f5] w-full min-h-screen flex flex-col">
-        <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center px-10">
+        <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center justify-between px-10">
+          <button
+            onClick={() => setLocation("/dashboard")}
+            className="flex items-center gap-2 text-black hover:opacity-70"
+            data-testid="button-home-template"
+          >
+            <Home size={24} />
+            <span className="font-playfair">Home</span>
+          </button>
           <button
             onClick={() => setLocation("/campaign")}
             className="text-black text-sm font-playfair hover:opacity-70 flex items-center gap-2"

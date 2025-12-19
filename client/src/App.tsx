@@ -10,6 +10,8 @@ import { DashboardPage } from "@/pages/DashboardPage";
 import { CampaignPage } from "@/pages/CampaignPage";
 import { MessagePage } from "@/pages/MessagePage";
 import { CreateTemplatePage } from "@/pages/CreateTemplatePage";
+import { ClientDashboardPage } from "@/pages/ClientDashboardPage";
+import { ClientRequestFormPage } from "@/pages/ClientRequestFormPage";
 
 function Router() {
   return (
@@ -20,6 +22,8 @@ function Router() {
       <Route path="/campaign" component={CampaignPage} />
       <Route path="/message" component={MessagePage} />
       <Route path="/create-template" component={CreateTemplatePage} />
+      <Route path="/client-dashboard" component={ClientDashboardPage} />
+      <Route path="/client-request-form" component={ClientRequestFormPage} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>

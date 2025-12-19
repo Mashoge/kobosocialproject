@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, ChevronRight, FolderPlus } from "lucide-react";
+import { Plus, ChevronRight, FolderPlus, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 
@@ -72,7 +72,15 @@ export const CampaignPage = (): JSX.Element => {
   if (selectedFolder && selectedCampaign) {
     return (
       <div className="bg-[#f5f5f5] w-full min-h-screen flex flex-col">
-        <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center px-10">
+        <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center justify-between px-10">
+          <button
+            onClick={() => setLocation("/dashboard")}
+            className="flex items-center gap-2 text-black hover:opacity-70"
+            data-testid="button-home-campaign"
+          >
+            <Home size={24} />
+            <span className="font-playfair">Home</span>
+          </button>
           <button
             onClick={() => setSelectedFolder(null)}
             className="text-black text-sm font-playfair hover:opacity-70"
@@ -113,7 +121,15 @@ export const CampaignPage = (): JSX.Element => {
   if (selectedCampaign) {
     return (
       <div className="bg-[#f5f5f5] w-full min-h-screen flex flex-col">
-        <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center px-10">
+        <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center justify-between px-10">
+          <button
+            onClick={() => setLocation("/dashboard")}
+            className="flex items-center gap-2 text-black hover:opacity-70"
+            data-testid="button-home-campaign"
+          >
+            <Home size={24} />
+            <span className="font-playfair">Home</span>
+          </button>
           <button
             onClick={() => setSelectedCampaign(null)}
             className="text-black text-sm font-playfair hover:opacity-70"

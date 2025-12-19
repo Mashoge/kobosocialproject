@@ -1,10 +1,12 @@
-import { Send, Search, Paperclip } from "lucide-react";
+import { Send, Search, Paperclip, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { useLocation } from "wouter";
 
 export const MessagePage = (): JSX.Element => {
+  const [, setLocation] = useLocation();
   const conversations = [
     {
       id: 1,
@@ -66,8 +68,17 @@ export const MessagePage = (): JSX.Element => {
 
   return (
     <div className="bg-[#f5f5f5] w-full min-h-screen flex flex-col">
-      <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center px-10">
+      <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center justify-between px-10">
+        <button
+          onClick={() => setLocation("/dashboard")}
+          className="flex items-center gap-2 text-black hover:opacity-70"
+          data-testid="button-home-message"
+        >
+          <Home size={24} />
+          <span className="text-lg font-playfair">Home</span>
+        </button>
         <h1 className="text-black text-2xl font-semibold font-playfair">Messages</h1>
+        <div className="w-24" />
       </header>
 
       <main className="flex-1 flex gap-6 p-8">
