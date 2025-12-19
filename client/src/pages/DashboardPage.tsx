@@ -1,8 +1,12 @@
-import { Home, MessageSquare, Users, FolderPlus, Mail, Settings } from "lucide-react";
+import { Home, MessageSquare, Users, FolderPlus, Mail, Settings, LogOut } from "lucide-react";
 import { useLocation } from "wouter";
 
 export const DashboardPage = (): JSX.Element => {
   const [, setLocation] = useLocation();
+
+  const handleLogout = () => {
+    setLocation("/");
+  };
 
   const dashboardCards = [
     {
@@ -60,6 +64,14 @@ export const DashboardPage = (): JSX.Element => {
           <button className="flex items-center gap-2 cursor-pointer" data-testid="button-message">
             <MessageSquare size={24} className="text-black" />
             <span className="text-black text-lg font-playfair">Message</span>
+          </button>
+          <button 
+            onClick={handleLogout}
+            className="flex items-center gap-2 cursor-pointer hover:opacity-70" 
+            data-testid="button-logout"
+          >
+            <LogOut size={24} className="text-black" />
+            <span className="text-black text-lg font-playfair">Logout</span>
           </button>
         </div>
       </header>
