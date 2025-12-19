@@ -1,5 +1,6 @@
 import { ArrowRightIcon } from "lucide-react";
 import React from "react";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,6 +18,12 @@ const loginForms = [
 ];
 
 export const LogInPage = (): JSX.Element => {
+  const [, setLocation] = useLocation();
+
+  const handleNavigateToDashboard = () => {
+    setLocation("/dashboard");
+  };
+
   return (
     <div className="bg-white w-full min-w-[1440px] min-h-[1024px] flex flex-col">
       <header className="w-full h-[54px] bg-[#d9cfc7d9]" />
@@ -75,7 +82,11 @@ export const LogInPage = (): JSX.Element => {
                 Forgot password?
               </a>
 
-              <Button className="w-[345px] h-[60px] mt-[15px] bg-[#4089ff] rounded-[10px] shadow-[0px_4px_4px_#00000040] hover:bg-[#4089ff]/90 [font-family:'Playfair_Display',Helvetica] font-semibold text-white text-2xl tracking-[0] leading-[31.9px]">
+              <Button 
+                onClick={handleNavigateToDashboard}
+                data-testid="button-next"
+                className="w-[345px] h-[60px] mt-[15px] bg-[#4089ff] rounded-[10px] shadow-[0px_4px_4px_#00000040] hover:bg-[#4089ff]/90 [font-family:'Playfair_Display',Helvetica] font-semibold text-white text-2xl tracking-[0] leading-[31.9px]"
+              >
                 Next
                 <ArrowRightIcon className="ml-2 w-5 h-5" />
               </Button>
