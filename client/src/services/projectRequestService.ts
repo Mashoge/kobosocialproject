@@ -28,7 +28,18 @@ export const createProjectRequest = async (data: any, files: File[]) => {
     // Store request in Firestore
     console.log("Saving to Firestore...");
     const docRef = await addDoc(collection(db, "projectRequests"), {
-      ...data,
+      clientName: data.clientName,
+      email: data.email,
+      projectTitle: data.projectTitle,
+      projectDescription: data.projectDescription,
+      country: data.country,
+      address: data.address,
+      contactNumber: data.contactNumber,
+      deadline: data.deadline,
+      budget: data.budget,
+      platforms: data.platforms,
+      deliverables: data.deliverables,
+      category: data.category,
       attachments,
       status: "Pending",
       createdAt: Timestamp.now()
