@@ -1,0 +1,45 @@
+I want you to generate a full React + TypeScript project request flow using Firebase. Here are the details:
+
+1. **Firebase Setup**
+   - I already have `firebase.ts` with Firestore and Storage configured and exported as `db` and `storage`.
+   - I already have `projectRequestService.ts` with a `createProjectRequest` function that uploads files and stores project requests in Firestore.
+
+2. **Client Side**
+   - Update the existing Client Project Request Form so that submitting it calls `createProjectRequest` and stores the form data + uploaded files in Firestore.
+   - Map the form fields correctly:
+     - `title` → `projectTitle`
+     - `description` → `projectDescription`
+     - `name` → `clientName`
+     - `email` → `email`
+     - `country`, `address`, `contactNumber` → optional fields in Firestore
+   - Implement file upload for ZIP, PDF, PNG, JPEG, XLS.
+   - Display toast notifications on success/failure.
+   - Reset the form and redirect to `/client-dashboard` on success.
+
+3. **Admin Side**
+   - Replace the mock `initialRequests` data with real Firestore data.
+   - Fetch all project requests from Firestore when the page loads.
+   - Display the list of pending requests.
+   - When a request is selected, show details including project description, client info, and attached files.
+   - Allow admin to approve/reject requests:
+     - Updating the request status in Firestore via `updateProjectRequestStatus`.
+     - Automatically remove the request from the pending list after action.
+
+4. **Navigation**
+   - Client and Admin pages should have working Home buttons that redirect appropriately.
+   - Ensure React Router (or Wouter) routing is consistent.
+
+5. **Figma Reference**
+   - Base the UI on this Figma link: https://www.figma.com/design/va0567KHpQmUzANFCS2dux/Untitled--Copy-?node-id=0-1&t=MeykXwDHCOldl5nc-1
+
+6. **Output**
+   - Provide full TypeScript code for:
+     - `ClientRequestFormPage.tsx`
+     - `ProjectRequestsPage.tsx` (Admin)
+   - Include all necessary imports and hooks.
+   - Ensure the code compiles in a standard Replit React/TypeScript project.
+   - No mock data; all data should come from Firestore.
+
+7. **Extra**
+   - Include proper error handling.
+   - Include comments in code to explain Firestore interactions.

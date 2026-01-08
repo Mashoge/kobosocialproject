@@ -4,42 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState, useEffect } from "react";
 
-// Mock service implementation for project requests
-const getAllProjectRequests = async () => {
-  return [
-    {
-      id: "1",
-      projectTitle: "E-commerce Website Redesign",
-      clientName: "Juan Dela Cruz",
-      email: "juan@example.com",
-      projectDescription: "Looking to redesign our existing Shopify store to improve mobile conversion rates and modernize the UI.",
-      status: "Pending",
-      createdAt: { toDate: () => new Date("2024-01-08") },
-      attachments: [{ name: "spec_v1.pdf", url: "#" }, { name: "branding_guide.zip", url: "#" }],
-      contactNumber: "09123456789",
-      address: "Manila, Philippines",
-      country: "Philippines"
-    },
-    {
-      id: "2",
-      projectTitle: "Mobile App for Food Delivery",
-      clientName: "Maria Santos",
-      email: "maria@example.com",
-      projectDescription: "A new food delivery platform targeting local restaurants in Cebu City. Needs rider and customer apps.",
-      status: "Pending",
-      createdAt: { toDate: () => new Date("2024-01-07") },
-      attachments: [{ name: "wireframes.pdf", url: "#" }],
-      contactNumber: "09987654321",
-      address: "Cebu City, Philippines",
-      country: "Philippines"
-    }
-  ];
-};
-
-const updateProjectRequestStatus = async (id: string, status: string) => {
-  console.log(`Mock status update for ${id}: ${status}`);
-  return { success: true };
-};
+import { getAllProjectRequests, updateProjectRequestStatus } from "@/services/projectRequestService";
 
 export const ProjectRequestsPage = (): JSX.Element => {
   const [, setLocation] = useLocation();

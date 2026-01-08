@@ -1,0 +1,34 @@
+import { collection, addDoc, getDocs, updateDoc, doc, Timestamp, query, orderBy } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, storage } from "@/lib/firebase";
+
+export const createProjectRequest = async (data: any, files: File[]) => {
+  const attachments = [];
+  
+  // Upload files to Firebase Storage
+  for (const file of files) {
+    const fileRef = ref(storage, `project-requests/${Date.now()}_${file.name}`);
+    await uploadBytes(fileRef, file);
+    const url = await getDownloadURL(fileRef);
+    attachments.push({ name: file.name, url });
+  }
+
+  // Store request in Firestore
+  return await addDoc(collection(db, "projectRequests"), {
+    ...data,
+    attachments,
+    status: "Pending",
+    createdAt: Timestamp.now()
+  });
+};
+
+export const getAllProjectRequests = async () => {
+  const q = query(collection(db, "projectRequests"), orderBy("createdAt", "desc"));
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+export const updateProjectRequestStatus = async (id: string, status: string) => {
+  const requestRef = doc(db, "projectRequests", id);
+  await updateDoc(requestRef, { status });
+};

@@ -6,11 +6,10 @@ import { useLocation } from "wouter";
 import { useState, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-// Mock service implementation
-const createProjectRequest = async (data: any, files: File[]) => {
-  console.log("Mock project request creation:", { data, files });
-  return { success: true };
-};
+import { createProjectRequest } from "@/services/projectRequestService";
+
+// Mock service implementation removed since we now have a real one
+// const createProjectRequest = ...
 
 export const ClientRequestFormPage = (): JSX.Element => {
   const [, setLocation] = useLocation();
