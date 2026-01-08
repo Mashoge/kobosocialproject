@@ -21,12 +21,14 @@ export async function createProjectRequest(
     email: string;
     projectTitle: string;
     projectDescription: string;
+    country?: string;
+    address?: string;
+    contactNumber?: string;
   },
-  files: File[] = [], // array of uploaded files
+  files: File[] = [],
 ) {
   const uploadedFiles: { name: string; url: string; type: string }[] = [];
 
-  // Upload each file to Firebase Storage
   for (const file of files) {
     const fileRef = ref(storage, `project_requests/${Date.now()}_${file.name}`);
     await uploadBytes(fileRef, file);
@@ -39,9 +41,14 @@ export async function createProjectRequest(
     });
   }
 
-  // Add the request to Firestore
   await addDoc(projectRequestsCollection, {
-    ...data,
+    clientName: data.clientName,
+    email: data.email,
+    projectTitle: data.projectTitle,
+    projectDescription: data.projectDescription,
+    country: data.country || "",
+    address: data.address || "",
+    contactNumber: data.contactNumber || "",
     attachments: uploadedFiles,
     status: "Pending",
     createdAt: serverTimestamp(),
