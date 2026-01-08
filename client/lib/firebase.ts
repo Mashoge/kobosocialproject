@@ -7,7 +7,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyCQo9765CTLDuqizsQs6Ai_n3OgWwiPhXc",
   authDomain: "kobodatabase-backend.firebaseapp.com",
   projectId: "kobodatabase-backend",
-  storageBucket: "kobodatabase-backend.firebasestorage.app",
+  storageBucket: "kobodatabase-backend.appspot.com",
   messagingSenderId: "282419994086",
   appId: "1:282419994086:web:db9a90c22bbb646df88a27",
   measurementId: "G-FFS2SJBL6L",
