@@ -7,7 +7,7 @@ const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSy...",
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "kobodatabase-backend.firebaseapp.com",
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "kobodatabase-backend",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "kobodatabase-backend.appspot.com",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "kobodatabase-backend.firebasestorage.app",
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "1234567890",
   appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:1234567890:web:abcdef"
 };

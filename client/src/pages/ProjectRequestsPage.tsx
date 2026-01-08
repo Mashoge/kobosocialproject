@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState, useEffect } from "react";
 
-import { getAllProjectRequests, updateProjectRequestStatus } from "@/services/projectRequestService";
+import {
+  getAllProjectRequests,
+  updateProjectRequestStatus,
+} from "@/services/projectRequestService";
 
 export const ProjectRequestsPage = (): JSX.Element => {
   const [, setLocation] = useLocation();

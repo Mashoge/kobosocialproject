@@ -27,19 +27,17 @@ export async function createProjectRequest(
   },
   files: File[] = [],
 ) {
-  const uploadedFiles: { name: string; url: string; type: string }[] = [];
-
-  for (const file of files) {
-    const fileRef = ref(storage, `project_requests/${Date.now()}_${file.name}`);
-    await uploadBytes(fileRef, file);
-    const url = await getDownloadURL(fileRef);
-
-    uploadedFiles.push({
-      name: file.name,
-      url,
-      type: file.type,
-    });
-  }
+  const uploadedFiles = await Promise.all(
+    files.map(async (file) => {
+      const fileRef = ref(
+        storage,
+        `project_requests/${Date.now()}_${file.name}`,
+      );
+      await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(fileRef);
+      return { name: file.name, url, type: file.type };
+    }),
+  );
 
   await addDoc(projectRequestsCollection, {
     clientName: data.clientName,

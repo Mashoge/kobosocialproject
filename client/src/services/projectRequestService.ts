@@ -8,13 +8,21 @@ export const createProjectRequest = async (data: any, files: File[]) => {
   
   try {
     // Upload files to Firebase Storage
-    for (const file of files) {
-      console.log(`Uploading file: ${file.name}`);
-      const fileRef = ref(storage, `project-requests/${Date.now()}_${file.name}`);
-      await uploadBytes(fileRef, file);
-      const url = await getDownloadURL(fileRef);
-      console.log(`File uploaded successfully: ${url}`);
-      attachments.push({ name: file.name, url });
+    if (files && files.length > 0) {
+      for (const file of files) {
+        console.log(`Uploading file: ${file.name}`);
+        // Create a unique path for the file
+        const fileName = `${Date.now()}_${file.name}`;
+        const fileRef = ref(storage, `project-requests/${fileName}`);
+        
+        // Use uploadBytes to upload the file
+        await uploadBytes(fileRef, file);
+        
+        // Get the public download URL
+        const url = await getDownloadURL(fileRef);
+        console.log(`File uploaded successfully: ${url}`);
+        attachments.push({ name: file.name, url });
+      }
     }
 
     // Store request in Firestore
@@ -28,7 +36,11 @@ export const createProjectRequest = async (data: any, files: File[]) => {
     console.log("Firestore document created with ID:", docRef.id);
     return docRef;
   } catch (error) {
-    console.error("Error in createProjectRequest:", error);
+    console.error("Detailed error in createProjectRequest:", error);
+    // Log the full error object for better debugging
+    if (error && typeof error === 'object') {
+      console.error("Error properties:", Object.getOwnPropertyNames(error));
+    }
     throw error;
   }
 };

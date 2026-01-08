@@ -8,7 +8,6 @@ import { useToast } from "@/hooks/use-toast";
 
 import { createProjectRequest } from "@/services/projectRequestService";
 
-// Mock service implementation removed since we now have a real one
 // const createProjectRequest = ...
 
 export const ClientRequestFormPage = (): JSX.Element => {
