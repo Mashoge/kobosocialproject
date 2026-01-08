@@ -84,7 +84,7 @@ export const CampaignPage = (): JSX.Element => {
           <Home size={24} className="text-black" />
           <span className="text-black text-lg font-playfair">Home</span>
         </button>
-        <button className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity">
+        <button onClick={() => setLocation("/campaign")} className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity">
           <Users size={24} className="text-black" />
           <span className="text-black text-lg font-playfair">Manage</span>
         </button>
