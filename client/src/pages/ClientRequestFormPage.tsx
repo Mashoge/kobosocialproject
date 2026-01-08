@@ -73,7 +73,7 @@ export const ClientRequestFormPage = (): JSX.Element => {
       toast({
         title: "Request Submitted!",
         description:
-          "Your project request has been sent to our Project Manager for review.",
+          "Your project request has been sent to our team for review.",
         className: "bg-green-50 text-green-800 border-green-200",
       });
 
