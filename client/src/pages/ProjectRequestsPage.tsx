@@ -1,4 +1,4 @@
-import { Home, Check, X, FileText, User, Search, Filter, Inbox, CheckCircle, XCircle, Star, Clock, AlertTriangle, Paperclip, ChevronDown, LayoutGrid, Users, MessageSquare } from "lucide-react";
+import { Home, Check, X, FileText, User, Search, Filter, Inbox, CheckCircle, XCircle, Star, Clock, AlertTriangle, Paperclip, ChevronDown, LayoutGrid, Users, MessageSquare, LogOut } from "lucide-react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,6 +17,11 @@ export const ProjectRequestsPage = (): JSX.Element => {
   const [activeTab, setActiveTab] = useState<"Primary" | "Updates" | "Urgent">("Primary");
   const [sidebarFilter, setSidebarFilter] = useState<"Inbox" | "Approved" | "Rejected" | "Important">("Inbox");
   const [searchQuery, setSearchQuery] = useState("");
+  const [adminComment, setAdminComment] = useState("");
+
+  const handleLogout = () => {
+    setLocation("/");
+  };
 
   // Fetch project requests from Firestore
   useEffect(() => {
@@ -44,6 +49,16 @@ export const ProjectRequestsPage = (): JSX.Element => {
     }
   };
 
+  const handleCommentSubmit = () => {
+    if (!selectedRequest || !adminComment.trim()) return;
+    // Update local state for now, normally would call a service
+    setRequests((prev: any[]) => prev.map(req => 
+      req.id === selectedRequest.id ? { ...req, adminComment } : req
+    ));
+    setSelectedRequest((prev: any | null) => prev ? { ...prev, adminComment } : null);
+    setAdminComment("");
+  };
+
   const filteredRequests = requests.filter(req => {
     // Sidebar filters
     if (sidebarFilter === "Approved" && req.status !== "Approved") return false;
@@ -57,29 +72,35 @@ export const ProjectRequestsPage = (): JSX.Element => {
   });
 
   return (
-    <div className="bg-[#E5E7EB] dark:bg-zinc-950 w-full min-h-screen flex flex-col font-sans">
-      {/* Top Header */}
-      <header className="w-full h-16 bg-[#D9D1C7] dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-6">
-        <div className="flex items-center gap-4">
-          <div className="bg-white dark:bg-zinc-800 px-4 py-1 rounded-full shadow-sm">
-            <span className="font-bold tracking-widest text-sm">ADMIN</span>
-          </div>
+    <div className="bg-[#f5f5f5] dark:bg-zinc-950 w-full min-h-screen flex flex-col font-sans">
+      {/* Top Header Consistent with Dashboard */}
+      <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center justify-between px-10">
+        <div className="bg-white px-6 py-2 rounded-full shadow-sm">
+          <span className="text-black text-xl font-semibold font-playfair tracking-widest">ADMIN</span>
         </div>
         
-        <nav className="flex items-center gap-8">
-          <button onClick={() => setLocation("/dashboard")} className="flex items-center gap-2 hover:opacity-70 transition-opacity">
-            <Home size={20} />
-            <span className="text-sm font-medium">Home</span>
+        <div className="flex gap-8 items-center">
+          <button onClick={() => setLocation("/dashboard")} className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity">
+            <Home size={24} className="text-black" />
+            <span className="text-black text-lg font-playfair">Home</span>
           </button>
-          <button className="flex items-center gap-2 hover:opacity-70 transition-opacity">
-            <Users size={20} />
-            <span className="text-sm font-medium">Manage</span>
+          <button className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity">
+            <Users size={24} className="text-black" />
+            <span className="text-black text-lg font-playfair">Manage</span>
           </button>
-          <button className="flex items-center gap-2 hover:opacity-70 transition-opacity">
-            <MessageSquare size={20} />
-            <span className="text-sm font-medium">Message</span>
+          <button onClick={() => setLocation("/message")} className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity">
+            <MessageSquare size={24} className="text-black" />
+            <span className="text-black text-lg font-playfair">Message</span>
           </button>
-        </nav>
+          <button 
+            onClick={handleLogout}
+            className="flex items-center gap-2 cursor-pointer hover:opacity-70" 
+            data-testid="button-logout"
+          >
+            <LogOut size={24} className="text-black" />
+            <span className="text-black text-lg font-playfair">Logout</span>
+          </button>
+        </div>
       </header>
 
       {/* Main Container */}
@@ -91,7 +112,7 @@ export const ProjectRequestsPage = (): JSX.Element => {
               { id: "Inbox", label: "Inbox", icon: Inbox, count: requests.filter(r => r.status === "Pending").length },
               { id: "Approved", label: "Approved", icon: CheckCircle, count: requests.filter(r => r.status === "Approved").length },
               { id: "Rejected", label: "Rejected", icon: XCircle, count: requests.filter(r => r.status === "Rejected").length },
-              { id: "Important", label: "Important", icon: Star, count: 10 },
+              { id: "Important", label: "Important", icon: Star, count: requests.filter(r => r.isImportant).length || 0 },
             ].map((item) => (
               <button
                 key={item.id}
@@ -122,8 +143,7 @@ export const ProjectRequestsPage = (): JSX.Element => {
                   className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 text-sm transition-colors ${activeTab === "Primary" ? "bg-white dark:bg-zinc-800 shadow-sm font-semibold" : "hover:bg-zinc-100 dark:hover:bg-zinc-800/50"}`}
                 >
                   <LayoutGrid size={16} />
-                  <span>Primary (22)</span>
-                  <span className="text-[10px] text-zinc-500 block">Main list of Requests</span>
+                  <span>Primary</span>
                 </button>
                 <div className="w-px h-8 bg-zinc-200 dark:border-zinc-800" />
                 <button 
@@ -131,7 +151,7 @@ export const ProjectRequestsPage = (): JSX.Element => {
                   className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 text-sm transition-colors ${activeTab === "Updates" ? "bg-white dark:bg-zinc-800 shadow-sm font-semibold" : "hover:bg-zinc-100 dark:hover:bg-zinc-800/50"}`}
                 >
                   <Clock size={16} />
-                  <span>Updates (5)</span>
+                  <span>Updates</span>
                 </button>
                 <div className="w-px h-8 bg-zinc-200 dark:border-zinc-800" />
                 <button 
@@ -139,7 +159,7 @@ export const ProjectRequestsPage = (): JSX.Element => {
                   className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 text-sm transition-colors ${activeTab === "Urgent" ? "bg-white dark:bg-zinc-800 shadow-sm font-semibold" : "hover:bg-zinc-100 dark:hover:bg-zinc-800/50"}`}
                 >
                   <AlertTriangle size={16} />
-                  <span>Urgent (0)</span>
+                  <span>Urgent</span>
                 </button>
                 <div className="flex-1 flex items-center px-4 gap-2">
                   <div className="flex-1" />
@@ -187,23 +207,34 @@ export const ProjectRequestsPage = (): JSX.Element => {
                       <h4 className="font-bold text-sm">Project Details:</h4>
                       <div className="grid grid-cols-2 gap-y-2 text-xs">
                         <span className="font-bold">Deadline:</span>
-                        <span>{selectedRequest.deadline || "January 25 2026"}</span>
+                        <span>{selectedRequest.deadline || "N/A"}</span>
                         <span className="font-bold">Budget:</span>
-                        <span>Php {selectedRequest.budget || "20,000"}</span>
+                        <span>Php {selectedRequest.budget || "N/A"}</span>
                         <span className="font-bold">Platform:</span>
-                        <span className="break-words">{selectedRequest.platforms || "Tiktok, Instagram, Facebook, Youtube."}</span>
+                        <span className="break-words">{selectedRequest.platforms || "N/A"}</span>
                         <span className="font-bold">Deliverables:</span>
-                        <span>{selectedRequest.deliverables || "Videos, Pictures, Merchs"}</span>
+                        <span>{selectedRequest.deliverables || "N/A"}</span>
                       </div>
                     </div>
 
                     <div className="border border-zinc-300 dark:border-zinc-700 p-4 rounded shadow-[2px_2px_0px_rgba(0,0,0,0.1)] flex flex-col h-64">
-                      <h4 className="font-bold text-xs underline mb-2">Comment Box:</h4>
-                      <div className="flex-1 text-[10px] leading-relaxed overflow-auto pr-2">
-                        {selectedRequest.comment || "Lorem ipsum dolor sit amet. Et quidem blanditiis ut odit nostrum rem fugiat natus cum quia temporibus non veniam molestiae rem aspernatur vero. Ut rerum galisum sed odit nihil ea quos totam aut blanditiis incidunt est similique explicabo. Cum consequatur reiciendis ab corporis vero est eaque voluptate. Sit natus debitis eos fuga possimus cum veniam repellat ut alias voluptatem quo alias harum vel molestias molestiae."}
+                      <h4 className="font-bold text-xs underline mb-2">Comment Box (Admin Only):</h4>
+                      <div className="flex-1 text-[10px] leading-relaxed overflow-auto pr-2 mb-2">
+                        {selectedRequest.adminComment || "No comments yet."}
                       </div>
-                      <div className="text-right mt-2">
-                        <button className="text-[10px] font-bold uppercase hover:underline">SUBMIT</button>
+                      <textarea 
+                        className="w-full h-20 text-[10px] border border-zinc-200 p-2 mb-2 focus:outline-none resize-none"
+                        placeholder="Type your comment here..."
+                        value={adminComment}
+                        onChange={(e) => setAdminComment(e.target.value)}
+                      />
+                      <div className="text-right">
+                        <button 
+                          onClick={handleCommentSubmit}
+                          className="text-[10px] font-bold uppercase hover:underline"
+                        >
+                          SUBMIT
+                        </button>
                       </div>
                     </div>
 
@@ -229,10 +260,7 @@ export const ProjectRequestsPage = (): JSX.Element => {
                     <div className="bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 p-8 shadow-sm flex-1 text-xs leading-relaxed overflow-auto">
                       <p className="mb-4 font-bold">Hello,</p>
                       <p className="mb-4">
-                        {selectedRequest.projectDescription || "Lorem ipsum dolor sit amet. Et quidem blanditiis ut odit nostrum rem fugiat natus cum quia temporibus non veniam molestiae rem aspernatur vero. Ut rerum galisum sed odit nihil ea quos totam aut blanditiis incidunt est similique explicabo. Cum consequatur reiciendis ab corporis vero est eaque voluptate. Sit natus debitis eos fuga possimus cum veniam repellat ut alias voluptatem quo alias harum vel molestias molestiae."}
-                      </p>
-                      <p className="mb-4 italic">
-                        Ut iste odio sit placeat iusto aut ullam odio aut dolorem perferendis ut quia iusto cum officiis nemo ea rerum odio. Et possimus quos ea officia quam pariatur deletus 33 necessitatibus laudantium est labore molestias ut inventore maiores.
+                        {selectedRequest.projectDescription}
                       </p>
                     </div>
                   </div>
@@ -241,7 +269,7 @@ export const ProjectRequestsPage = (): JSX.Element => {
                   <div className="col-span-3 space-y-12">
                     <div className="text-right">
                       <h4 className="font-bold text-xs">Project Type/Category:</h4>
-                      <p className="text-xs">{selectedRequest.category || "Social Media Promotion"}</p>
+                      <p className="text-xs">{selectedRequest.category || "N/A"}</p>
                     </div>
 
                     <div className="text-right">
@@ -255,17 +283,9 @@ export const ProjectRequestsPage = (): JSX.Element => {
                             <Paperclip size={12} />
                             <span>{file.name}</span>
                           </a>
-                        )) || (
-                          <>
-                            <div className="flex items-center justify-end gap-2 text-[10px] hover:underline cursor-pointer">
-                              <Paperclip size={12} />
-                              <span>Sample.pdf</span>
-                            </div>
-                            <div className="flex items-center justify-end gap-2 text-[10px] hover:underline cursor-pointer">
-                              <Paperclip size={12} />
-                              <span>link.google.drive</span>
-                            </div>
-                          </>
+                        ))}
+                        {(!selectedRequest.attachments || selectedRequest.attachments.length === 0) && (
+                          <span className="text-[10px] text-zinc-400 italic">No files attached</span>
                         )}
                       </div>
                     </div>

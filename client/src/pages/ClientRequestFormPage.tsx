@@ -8,8 +8,6 @@ import { useToast } from "@/hooks/use-toast";
 
 import { createProjectRequest } from "@/services/projectRequestService";
 
-// const createProjectRequest = ...
-
 export const ClientRequestFormPage = (): JSX.Element => {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
@@ -23,6 +21,11 @@ export const ClientRequestFormPage = (): JSX.Element => {
     email: "",
     address: "",
     contactNumber: "",
+    deadline: "",
+    budget: "",
+    platforms: "",
+    deliverables: "",
+    category: "",
   });
 
   const [files, setFiles] = useState<File[]>([]);
@@ -68,6 +71,11 @@ export const ClientRequestFormPage = (): JSX.Element => {
           country: formData.country,
           address: formData.address,
           contactNumber: formData.contactNumber,
+          deadline: formData.deadline,
+          budget: formData.budget,
+          platforms: formData.platforms,
+          deliverables: formData.deliverables,
+          category: formData.category,
         },
         files,
       );
@@ -88,6 +96,11 @@ export const ClientRequestFormPage = (): JSX.Element => {
         email: "",
         address: "",
         contactNumber: "",
+        deadline: "",
+        budget: "",
+        platforms: "",
+        deliverables: "",
+        category: "",
       });
       setFiles([]);
 
@@ -124,7 +137,7 @@ export const ClientRequestFormPage = (): JSX.Element => {
       </header>
 
       <main className="flex-1 px-10 py-8">
-        <div className="bg-white rounded-lg shadow-md max-w-4xl mx-auto">
+        <div className="bg-white rounded-lg shadow-md max-w-4xl mx-auto overflow-hidden">
           <div className="bg-[#e5e5e5] h-16 flex items-center px-8">
             <h2 className="text-black font-semibold text-2xl font-playfair">
               Project Request Form
@@ -133,21 +146,84 @@ export const ClientRequestFormPage = (): JSX.Element => {
 
           <div className="p-8 space-y-8">
             {/* Project Details */}
-            <div>
-              <h3 className="text-black font-playfair font-semibold text-lg mb-4">
+            <div className="space-y-4">
+              <h3 className="text-black font-playfair font-semibold text-lg">
                 Project Details
               </h3>
-              <div>
-                <label className="block text-sm font-playfair font-semibold text-gray-800 mb-2">
-                  Project Title:
-                </label>
-                <Input
-                  value={formData.title}
-                  onChange={(e) => handleInputChange("title", e.target.value)}
-                  placeholder="Video Advertisement e.g."
-                  className="w-full border-gray-300"
-                  data-testid="input-project-title"
-                />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2">
+                  <label className="block text-sm font-playfair font-semibold text-gray-800 mb-2">
+                    Project Title:
+                  </label>
+                  <Input
+                    value={formData.title}
+                    onChange={(e) => handleInputChange("title", e.target.value)}
+                    placeholder="Video Advertisement e.g."
+                    className="w-full border-gray-300"
+                    data-testid="input-project-title"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-playfair font-semibold text-gray-800 mb-2">
+                    Deadline of the Project:
+                  </label>
+                  <Input
+                    value={formData.deadline}
+                    onChange={(e) => handleInputChange("deadline", e.target.value)}
+                    placeholder="January 25 2026 e.g."
+                    className="w-full border-gray-300"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-playfair font-semibold text-gray-800 mb-2">
+                    Budget of the Project:
+                  </label>
+                  <Input
+                    value={formData.budget}
+                    onChange={(e) => handleInputChange("budget", e.target.value)}
+                    placeholder="Php 20,000 e.g."
+                    className="w-full border-gray-300"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-playfair font-semibold text-gray-800 mb-2">
+                    Social Media Platform:
+                  </label>
+                  <Input
+                    value={formData.platforms}
+                    onChange={(e) => handleInputChange("platforms", e.target.value)}
+                    placeholder="Tiktok, Instagram, etc."
+                    className="w-full border-gray-300"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-playfair font-semibold text-gray-800 mb-2">
+                    Deliverables:
+                  </label>
+                  <Input
+                    value={formData.deliverables}
+                    onChange={(e) => handleInputChange("deliverables", e.target.value)}
+                    placeholder="Videos, Pictures, Merchs e.g."
+                    className="w-full border-gray-300"
+                  />
+                </div>
+
+                <div className="col-span-2">
+                  <label className="block text-sm font-playfair font-semibold text-gray-800 mb-2">
+                    Project Type/Category:
+                  </label>
+                  <Input
+                    value={formData.category}
+                    onChange={(e) => handleInputChange("category", e.target.value)}
+                    placeholder="Social Media Promotion e.g."
+                    className="w-full border-gray-300"
+                  />
+                </div>
               </div>
             </div>
 

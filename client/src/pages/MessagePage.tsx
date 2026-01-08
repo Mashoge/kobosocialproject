@@ -1,4 +1,4 @@
-import { Send, Search, Paperclip, Home } from "lucide-react";
+import { Send, Search, Paperclip, Home, Users, MessageSquare, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -7,6 +7,41 @@ import { useLocation } from "wouter";
 
 export const MessagePage = (): JSX.Element => {
   const [, setLocation] = useLocation();
+  const handleLogout = () => {
+    setLocation("/");
+  };
+
+  const AdminHeader = () => (
+    <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center justify-between px-10">
+      <div className="bg-white px-6 py-2 rounded-full shadow-sm">
+        <span className="text-black text-xl font-semibold font-playfair tracking-widest">ADMIN</span>
+      </div>
+      
+      <div className="flex gap-8 items-center">
+        <button onClick={() => setLocation("/dashboard")} className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity">
+          <Home size={24} className="text-black" />
+          <span className="text-black text-lg font-playfair">Home</span>
+        </button>
+        <button className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity">
+          <Users size={24} className="text-black" />
+          <span className="text-black text-lg font-playfair">Manage</span>
+        </button>
+        <button onClick={() => setLocation("/message")} className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity">
+          <MessageSquare size={24} className="text-black" />
+          <span className="text-black text-lg font-playfair">Message</span>
+        </button>
+        <button 
+          onClick={handleLogout}
+          className="flex items-center gap-2 cursor-pointer hover:opacity-70" 
+          data-testid="button-logout"
+        >
+          <LogOut size={24} className="text-black" />
+          <span className="text-black text-lg font-playfair">Logout</span>
+        </button>
+      </div>
+    </header>
+  );
+
   const conversations = [
     {
       id: 1,
@@ -68,20 +103,9 @@ export const MessagePage = (): JSX.Element => {
 
   return (
     <div className="bg-[#f5f5f5] w-full min-h-screen flex flex-col">
-      <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center justify-between px-10">
-        <button
-          onClick={() => setLocation("/dashboard")}
-          className="flex items-center gap-2 text-black hover:opacity-70"
-          data-testid="button-home-message"
-        >
-          <Home size={24} />
-          <span className="text-lg font-playfair">Home</span>
-        </button>
-        <h1 className="text-black text-2xl font-semibold font-playfair">Messages</h1>
-        <div className="w-24" />
-      </header>
+      <AdminHeader />
 
-      <main className="flex-1 flex gap-6 p-8">
+      <main className="flex-1 flex gap-6 p-8 overflow-hidden">
         {/* Conversations List */}
         <Card className="w-80 bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
           <div className="bg-[#e5e5e5] h-16 flex items-center px-6">

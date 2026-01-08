@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, ChevronRight, FolderPlus, Home } from "lucide-react";
+import { Plus, ChevronRight, FolderPlus, Home, Users, MessageSquare, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 
@@ -22,6 +22,10 @@ export const CampaignPage = (): JSX.Element => {
   const [selectedFolder, setSelectedFolder] = useState<Folder | null>(null);
   const [showCreateFolderInput, setShowCreateFolderInput] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
+
+  const handleLogout = () => {
+    setLocation("/");
+  };
 
   const [campaigns, setCampaigns] = useState<Campaign[]>([
     {
@@ -69,18 +73,42 @@ export const CampaignPage = (): JSX.Element => {
     setLocation("/create-template");
   };
 
+  const AdminHeader = () => (
+    <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center justify-between px-10">
+      <div className="bg-white px-6 py-2 rounded-full shadow-sm">
+        <span className="text-black text-xl font-semibold font-playfair tracking-widest">ADMIN</span>
+      </div>
+      
+      <div className="flex gap-8 items-center">
+        <button onClick={() => setLocation("/dashboard")} className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity">
+          <Home size={24} className="text-black" />
+          <span className="text-black text-lg font-playfair">Home</span>
+        </button>
+        <button className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity">
+          <Users size={24} className="text-black" />
+          <span className="text-black text-lg font-playfair">Manage</span>
+        </button>
+        <button onClick={() => setLocation("/message")} className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity">
+          <MessageSquare size={24} className="text-black" />
+          <span className="text-black text-lg font-playfair">Message</span>
+        </button>
+        <button 
+          onClick={handleLogout}
+          className="flex items-center gap-2 cursor-pointer hover:opacity-70" 
+          data-testid="button-logout"
+        >
+          <LogOut size={24} className="text-black" />
+          <span className="text-black text-lg font-playfair">Logout</span>
+        </button>
+      </div>
+    </header>
+  );
+
   if (selectedFolder && selectedCampaign) {
     return (
       <div className="bg-[#f5f5f5] w-full min-h-screen flex flex-col">
-        <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center justify-between px-10">
-          <button
-            onClick={() => setLocation("/dashboard")}
-            className="flex items-center gap-2 text-black hover:opacity-70"
-            data-testid="button-home-campaign"
-          >
-            <Home size={24} />
-            <span className="font-playfair">Home</span>
-          </button>
+        <AdminHeader />
+        <div className="px-10 py-4">
           <button
             onClick={() => setSelectedFolder(null)}
             className="text-black text-sm font-playfair hover:opacity-70"
@@ -88,7 +116,7 @@ export const CampaignPage = (): JSX.Element => {
           >
             ← Back to {selectedCampaign.name}
           </button>
-        </header>
+        </div>
 
         <main className="flex-1 px-10 py-8">
           <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl">
@@ -121,15 +149,8 @@ export const CampaignPage = (): JSX.Element => {
   if (selectedCampaign) {
     return (
       <div className="bg-[#f5f5f5] w-full min-h-screen flex flex-col">
-        <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center justify-between px-10">
-          <button
-            onClick={() => setLocation("/dashboard")}
-            className="flex items-center gap-2 text-black hover:opacity-70"
-            data-testid="button-home-campaign"
-          >
-            <Home size={24} />
-            <span className="font-playfair">Home</span>
-          </button>
+        <AdminHeader />
+        <div className="px-10 py-4">
           <button
             onClick={() => setSelectedCampaign(null)}
             className="text-black text-sm font-playfair hover:opacity-70"
@@ -137,7 +158,7 @@ export const CampaignPage = (): JSX.Element => {
           >
             ← Back to campaign list
           </button>
-        </header>
+        </div>
 
         <main className="flex-1 px-10 py-8">
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -200,44 +221,41 @@ export const CampaignPage = (): JSX.Element => {
   }
 
   return (
-    <div className="bg-[#f5f5f5] w-full min-h-screen flex">
-      {/* Sidebar */}
-      <div className="w-48 bg-white shadow-md p-6 flex flex-col">
-        <Button
-          onClick={handleNewCampaign}
-          className="w-full mb-6 bg-white border border-gray-300 text-black hover:bg-gray-50 font-playfair font-semibold rounded-lg"
-          data-testid="button-new-campaign"
-        >
-          + New Campaign
-        </Button>
+    <div className="bg-[#f5f5f5] w-full min-h-screen flex flex-col">
+      <AdminHeader />
+      <div className="flex-1 flex">
+        {/* Sidebar */}
+        <div className="w-48 bg-white shadow-md p-6 flex flex-col">
+          <Button
+            onClick={handleNewCampaign}
+            className="w-full mb-6 bg-white border border-gray-300 text-black hover:bg-gray-50 font-playfair font-semibold rounded-lg"
+            data-testid="button-new-campaign"
+          >
+            + New Campaign
+          </Button>
 
-        <div className="space-y-3 flex-1">
-          {campaigns.map((campaign) => {
-            const isSelected = selectedCampaign && selectedCampaign.id === campaign.id;
-            return (
-              <button
-                key={campaign.id}
-                onClick={() => setSelectedCampaign(campaign)}
-                className={`w-full text-left p-4 rounded-lg border border-gray-300 hover:bg-gray-50 transition ${
-                  isSelected ? "bg-blue-50 border-blue-300" : ""
-                }`}
-                data-testid={`button-campaign-${campaign.id}`}
-              >
-                <h3 className="font-playfair font-bold text-gray-800">{campaign.name}</h3>
-                <p className="text-xs text-gray-600 mt-1 line-clamp-2">{campaign.description}</p>
-                <ChevronRight className="w-4 h-4 text-gray-600 mt-2" />
-              </button>
-            );
-          })}
+          <div className="space-y-3 flex-1 overflow-auto">
+            {campaigns.map((campaign: any) => {
+              const isSelected = selectedCampaign && (selectedCampaign as any).id === campaign.id;
+              return (
+                <button
+                  key={campaign.id}
+                  onClick={() => setSelectedCampaign(campaign)}
+                  className={`w-full text-left p-4 rounded-lg border border-gray-300 hover:bg-gray-50 transition ${
+                    isSelected ? "bg-blue-50 border-blue-300" : ""
+                  }`}
+                  data-testid={`button-campaign-${campaign.id}`}
+                >
+                  <h3 className="font-playfair font-bold text-gray-800">{campaign.name}</h3>
+                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">{campaign.description}</p>
+                  <ChevronRight className="w-4 h-4 text-gray-600 mt-2" />
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center px-10">
-          <h1 className="text-black text-2xl font-semibold font-playfair">Campaigns</h1>
-        </header>
-
+        {/* Main Content */}
         <main className="flex-1 flex items-center justify-center px-10 py-8">
           <div className="text-center">
             <div className="w-24 h-24 bg-[#83ffb333] rounded-full flex items-center justify-center mx-auto mb-4">
