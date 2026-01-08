@@ -3,23 +3,34 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
 
 export const createProjectRequest = async (data: any, files: File[]) => {
+  console.log("Starting project request creation with data:", data);
   const attachments = [];
   
-  // Upload files to Firebase Storage
-  for (const file of files) {
-    const fileRef = ref(storage, `project-requests/${Date.now()}_${file.name}`);
-    await uploadBytes(fileRef, file);
-    const url = await getDownloadURL(fileRef);
-    attachments.push({ name: file.name, url });
-  }
+  try {
+    // Upload files to Firebase Storage
+    for (const file of files) {
+      console.log(`Uploading file: ${file.name}`);
+      const fileRef = ref(storage, `project-requests/${Date.now()}_${file.name}`);
+      await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(fileRef);
+      console.log(`File uploaded successfully: ${url}`);
+      attachments.push({ name: file.name, url });
+    }
 
-  // Store request in Firestore
-  return await addDoc(collection(db, "projectRequests"), {
-    ...data,
-    attachments,
-    status: "Pending",
-    createdAt: Timestamp.now()
-  });
+    // Store request in Firestore
+    console.log("Saving to Firestore...");
+    const docRef = await addDoc(collection(db, "projectRequests"), {
+      ...data,
+      attachments,
+      status: "Pending",
+      createdAt: Timestamp.now()
+    });
+    console.log("Firestore document created with ID:", docRef.id);
+    return docRef;
+  } catch (error) {
+    console.error("Error in createProjectRequest:", error);
+    throw error;
+  }
 };
 
 export const getAllProjectRequests = async () => {

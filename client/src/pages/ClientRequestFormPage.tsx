@@ -43,6 +43,8 @@ export const ClientRequestFormPage = (): JSX.Element => {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async () => {
     // Basic validation
     if (!formData.title || !formData.description || !formData.email) {
@@ -55,6 +57,7 @@ export const ClientRequestFormPage = (): JSX.Element => {
       return;
     }
 
+    setIsSubmitting(true);
     try {
       // Call the service to store in Firebase
       await createProjectRequest(
@@ -99,6 +102,8 @@ export const ClientRequestFormPage = (): JSX.Element => {
           "There was an error sending your request. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -314,10 +319,11 @@ export const ClientRequestFormPage = (): JSX.Element => {
               </Button>
               <Button
                 onClick={handleSubmit}
-                className="px-12 bg-[#83ffb3] hover:bg-[#6ae091] text-black font-semibold"
+                disabled={isSubmitting}
+                className="px-12 bg-[#83ffb3] hover:bg-[#6ae091] text-black font-semibold disabled:opacity-50"
                 data-testid="button-submit-request"
               >
-                Submit Request
+                {isSubmitting ? "Submitting..." : "Submit Request"}
               </Button>
             </div>
           </div>
