@@ -36,7 +36,7 @@ export const DashboardPage = (): JSX.Element => {
       description: "Approved or reject projects",
       bgColor: "bg-[#ff78d233]",
       icon: Mail,
-      path: "#",
+      path: "/project-requests",
     },
     {
       title: "Message",

@@ -1,11 +1,88 @@
-import { Home } from "lucide-react";
+import { Home, Upload, X, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useLocation } from "wouter";
+import { useState, useRef } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export const ClientRequestFormPage = (): JSX.Element => {
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    name: "",
+    country: "",
+    email: "",
+    address: "",
+    contactNumber: ""
+  });
+  
+  const [files, setFiles] = useState<File[]>([]);
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setFiles(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async () => {
+    // Basic validation
+    if (!formData.title || !formData.description || !formData.email) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in the project title, description, and your email.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      // In a real app, we would call the service here
+      // const response = await createProjectRequest(formData, files);
+      
+      console.log("Submitting Project Request:", { formData, files });
+      
+      toast({
+        title: "Request Submitted!",
+        description: "Your project request has been sent to our team for review.",
+        className: "bg-green-50 text-green-800 border-green-200"
+      });
+
+      // Reset form
+      setFormData({
+        title: "",
+        description: "",
+        name: "",
+        country: "",
+        email: "",
+        address: "",
+        contactNumber: ""
+      });
+      setFiles([]);
+      
+      // Redirect after success
+      setTimeout(() => setLocation("/client-dashboard"), 2000);
+    } catch (error) {
+      toast({
+        title: "Submission Failed",
+        description: "There was an error sending your request. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
 
   return (
     <div className="bg-[#f5f5f5] w-full min-h-screen flex flex-col">
@@ -37,6 +114,8 @@ export const ClientRequestFormPage = (): JSX.Element => {
                   Project Title:
                 </label>
                 <Input
+                  value={formData.title}
+                  onChange={(e) => handleInputChange("title", e.target.value)}
                   placeholder="Video Advertisement e.g."
                   className="w-full border-gray-300"
                   data-testid="input-project-title"
@@ -48,6 +127,8 @@ export const ClientRequestFormPage = (): JSX.Element => {
             <div>
               <h3 className="text-black font-playfair font-semibold text-lg mb-4">Project Description</h3>
               <Textarea
+                value={formData.description}
+                onChange={(e) => handleInputChange("description", e.target.value)}
                 placeholder="Type purpose, category of the project & other needed information..."
                 className="w-full resize-none border-gray-300 min-h-32"
                 data-testid="input-project-description"
@@ -60,15 +141,41 @@ export const ClientRequestFormPage = (): JSX.Element => {
                 Attach Supporting Files
               </h3>
               <p className="text-gray-600 text-sm mb-4">Related to the proposed project</p>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
-                <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
+              <div 
+                className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-blue-400 cursor-pointer transition-colors"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  multiple
+                  className="hidden"
+                  accept=".xls,.zip,.pdf,.png,.jpeg"
+                />
+                <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                 <p className="text-gray-600 text-sm">
                   Drag & Drop or <span className="text-blue-500 cursor-pointer">Choose file</span> to upload
                 </p>
-                <p className="text-gray-400 text-xs mt-2">xls, pdf, png, jpeg</p>
+                <p className="text-gray-400 text-xs mt-2">xls, zip, pdf, png, jpeg</p>
               </div>
+
+              {/* Selected Files List */}
+              {files.length > 0 && (
+                <div className="mt-4 space-y-2">
+                  {files.map((file, idx) => (
+                    <div key={idx} className="flex items-center justify-between bg-blue-50 px-4 py-2 rounded-md border border-blue-100">
+                      <div className="flex items-center gap-2 text-blue-700">
+                        <FileText size={16} />
+                        <span className="text-sm">{file.name}</span>
+                      </div>
+                      <button onClick={(e) => { e.stopPropagation(); removeFile(idx); }} className="text-gray-400 hover:text-red-500">
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Contact Information */}
@@ -80,6 +187,8 @@ export const ClientRequestFormPage = (): JSX.Element => {
                     NAME
                   </label>
                   <Input
+                    value={formData.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
                     placeholder="Juan Dela Cruz e.g."
                     className="border-gray-300"
                     data-testid="input-contact-name"
@@ -90,6 +199,8 @@ export const ClientRequestFormPage = (): JSX.Element => {
                     COUNTRY
                   </label>
                   <Input
+                    value={formData.country}
+                    onChange={(e) => handleInputChange("country", e.target.value)}
                     placeholder="Philippines e.g."
                     className="border-gray-300"
                     data-testid="input-country"
@@ -103,6 +214,8 @@ export const ClientRequestFormPage = (): JSX.Element => {
                     EMAIL ADDRESS
                   </label>
                   <Input
+                    value={formData.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
                     placeholder="juan1735@email.com e.g."
                     className="border-gray-300"
                     data-testid="input-email"
@@ -113,6 +226,8 @@ export const ClientRequestFormPage = (): JSX.Element => {
                     CURRENT ADDRESS
                   </label>
                   <Input
+                    value={formData.address}
+                    onChange={(e) => handleInputChange("address", e.target.value)}
                     placeholder="City, Street, Province/State e.g."
                     className="border-gray-300"
                     data-testid="input-address"
@@ -125,6 +240,8 @@ export const ClientRequestFormPage = (): JSX.Element => {
                   CONTACT NUMBER
                 </label>
                 <Input
+                  value={formData.contactNumber}
+                  onChange={(e) => handleInputChange("contactNumber", e.target.value)}
                   placeholder="09123456789 e.g."
                   className="border-gray-300"
                   data-testid="input-contact-number"
@@ -143,6 +260,7 @@ export const ClientRequestFormPage = (): JSX.Element => {
                 Cancel
               </Button>
               <Button
+                onClick={handleSubmit}
                 className="px-12 bg-[#83ffb3] hover:bg-[#6ae091] text-black font-semibold"
                 data-testid="button-submit-request"
               >

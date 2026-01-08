@@ -12,6 +12,7 @@ import { MessagePage } from "@/pages/MessagePage";
 import { CreateTemplatePage } from "@/pages/CreateTemplatePage";
 import { ClientDashboardPage } from "@/pages/ClientDashboardPage";
 import { ClientRequestFormPage } from "@/pages/ClientRequestFormPage";
+import { ProjectRequestsPage } from "@/pages/ProjectRequestsPage";
 
 function Router() {
   return (
@@ -24,6 +25,7 @@ function Router() {
       <Route path="/create-template" component={CreateTemplatePage} />
       <Route path="/client-dashboard" component={ClientDashboardPage} />
       <Route path="/client-request-form" component={ClientRequestFormPage} />
+      <Route path="/project-requests" component={ProjectRequestsPage} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>
