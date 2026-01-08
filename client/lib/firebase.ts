@@ -2,11 +2,10 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-// firebase config
+// your firebase con
 const firebaseConfig = {
-  apiKey: "",
-  aAIzaSyCQo9765CTLDuqizsQs6Ai_n3OgWwiPhXcuthDomain:
-    "kobodatabase-backend.firebaseapp.com",
+  apiKey: "AIzaSyCQo9765CTLDuqizsQs6Ai_n3OgWwiPhXc",
+  authDomain: "kobodatabase-backend.firebaseapp.com",
   projectId: "kobodatabase-backend",
   storageBucket: "kobodatabase-backend.firebasestorage.app",
   messagingSenderId: "282419994086",
