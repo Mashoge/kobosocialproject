@@ -68,15 +68,15 @@ export const DashboardPage = (): JSX.Element => {
           <span className="text-black text-xl font-semibold font-playfair">ADMIN</span>
         </div>
         <div className="flex gap-8 items-center">
-          <button className="flex items-center gap-2 cursor-pointer" data-testid="button-home">
+          <button onClick={() => setLocation("/dashboard")} className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity" data-testid="button-home">
             <Home size={24} className="text-black" />
             <span className="text-black text-lg font-playfair">Home</span>
           </button>
-          <button className="flex items-center gap-2 cursor-pointer" data-testid="button-manage">
+          <button onClick={() => setLocation("/campaign")} className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity" data-testid="button-manage">
             <Users size={24} className="text-black" />
             <span className="text-black text-lg font-playfair">Manage</span>
           </button>
-          <button className="flex items-center gap-2 cursor-pointer" data-testid="button-message">
+          <button onClick={() => setLocation("/message")} className="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity" data-testid="button-message">
             <MessageSquare size={24} className="text-black" />
             <span className="text-black text-lg font-playfair">Message</span>
           </button>
