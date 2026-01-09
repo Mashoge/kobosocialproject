@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Home, Users, MessageSquare, LogOut, Search, ChevronDown, Star } from "lucide-react";
+import { Home, Users, MessageSquare, LogOut, Search, ChevronDown, Star, X, Mail } from "lucide-react";
 import { useLocation } from "wouter";
 import { getAllEvaluations, markEvaluationAsReviewed, Evaluation } from "@/services/evaluationService";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export const EvaluationReviewPage = (): JSX.Element => {
   const [, setLocation] = useLocation();
@@ -13,6 +14,7 @@ export const EvaluationReviewPage = (): JSX.Element => {
   const [reviewedSubTab, setReviewedSubTab] = useState<"Client" | "Team">("Client");
   const [clientSearch, setClientSearch] = useState("");
   const [teamSearch, setTeamSearch] = useState("");
+  const [selectedEvaluation, setSelectedEvaluation] = useState<Evaluation | null>(null);
 
   useEffect(() => {
     fetchEvaluations();
@@ -31,6 +33,7 @@ export const EvaluationReviewPage = (): JSX.Element => {
     try {
       await markEvaluationAsReviewed(id);
       fetchEvaluations();
+      setSelectedEvaluation(null);
     } catch (error) {
       console.error("Failed to mark as reviewed:", error);
     }
@@ -143,7 +146,11 @@ export const EvaluationReviewPage = (): JSX.Element => {
                   {evaluations
                     .filter(e => e.status === 'Reviewed' && e.evaluatorType === reviewedSubTab.toLowerCase())
                     .map((e) => (
-                      <div key={e.id} className="p-6 flex items-start gap-4 hover:bg-zinc-50 transition-colors">
+                      <div 
+                        key={e.id} 
+                        className="p-6 flex items-start gap-4 hover:bg-zinc-50 transition-colors cursor-pointer"
+                        onClick={() => setSelectedEvaluation(e)}
+                      >
                         <div className="w-12 h-12 rounded-full bg-zinc-100 flex-shrink-0 flex items-center justify-center border border-zinc-200">
                            <Users size={24} className="text-zinc-400" />
                         </div>
@@ -161,7 +168,7 @@ export const EvaluationReviewPage = (): JSX.Element => {
                               </div>
                             </div>
                           </div>
-                          <p className="text-sm text-zinc-600 italic bg-zinc-50 p-3 rounded-md border border-zinc-100">
+                          <p className="text-sm text-zinc-600 italic bg-zinc-50 p-3 rounded-md border border-zinc-100 line-clamp-2">
                             "{e.feedback}"
                           </p>
                         </div>
@@ -244,8 +251,12 @@ export const EvaluationReviewPage = (): JSX.Element => {
                     </div>
                     <div className="divide-y divide-zinc-100 max-h-[500px] overflow-auto">
                       {filteredClientEvaluations.filter(e => e.status === 'Pending').map((e) => (
-                        <div key={e.id} className="p-6 flex items-start gap-4 hover:bg-zinc-50 group transition-colors">
-                          <div className="w-12 h-12 rounded-full bg-zinc-100 flex-shrink-0 flex items-center justify-center overflow-hidden border border-zinc-200">
+                        <div 
+                          key={e.id} 
+                          className="p-6 flex items-start gap-4 hover:bg-zinc-50 group transition-colors cursor-pointer"
+                          onClick={() => setSelectedEvaluation(e)}
+                        >
+                          <div className="w-12 h-12 rounded-full bg-zinc-100 flex-shrink-0 flex items-center justify-center border border-zinc-200">
                              <Users size={24} className="text-zinc-400" />
                           </div>
                           <div className="flex-1 min-w-0">
@@ -263,14 +274,15 @@ export const EvaluationReviewPage = (): JSX.Element => {
                                 </div>
                               </div>
                             </div>
-                            {e.status === 'Pending' && (
-                              <button 
-                                onClick={() => handleMarkAsReviewed(e.id)}
-                                className="text-[10px] font-bold text-zinc-900 uppercase hover:underline mt-2"
-                              >
-                                Mark as Reviewed
-                              </button>
-                            )}
+                            <button 
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleMarkAsReviewed(e.id);
+                              }}
+                              className="text-[10px] font-bold text-zinc-900 uppercase hover:underline mt-2"
+                            >
+                              Mark as Reviewed
+                            </button>
                           </div>
                         </div>
                       ))}
@@ -304,8 +316,12 @@ export const EvaluationReviewPage = (): JSX.Element => {
                     </div>
                     <div className="divide-y divide-zinc-100 max-h-[500px] overflow-auto">
                       {filteredTeamEvaluations.filter(e => e.status === 'Pending').map((e) => (
-                        <div key={e.id} className="p-6 flex items-start gap-4 hover:bg-zinc-50 group transition-colors">
-                          <div className="w-12 h-12 rounded-full bg-zinc-100 flex-shrink-0 flex items-center justify-center overflow-hidden border border-zinc-200">
+                        <div 
+                          key={e.id} 
+                          className="p-6 flex items-start gap-4 hover:bg-zinc-50 group transition-colors cursor-pointer"
+                          onClick={() => setSelectedEvaluation(e)}
+                        >
+                          <div className="w-12 h-12 rounded-full bg-zinc-100 flex-shrink-0 flex items-center justify-center border border-zinc-200">
                              <Users size={24} className="text-zinc-400" />
                           </div>
                           <div className="flex-1 min-w-0">
@@ -323,14 +339,15 @@ export const EvaluationReviewPage = (): JSX.Element => {
                                 </div>
                               </div>
                             </div>
-                            {e.status === 'Pending' && (
-                              <button 
-                                onClick={() => handleMarkAsReviewed(e.id)}
-                                className="text-[10px] font-bold text-zinc-900 uppercase hover:underline mt-2"
-                              >
-                                Mark as Reviewed
-                              </button>
-                            )}
+                            <button 
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleMarkAsReviewed(e.id);
+                              }}
+                              className="text-[10px] font-bold text-zinc-900 uppercase hover:underline mt-2"
+                            >
+                              Mark as Reviewed
+                            </button>
                           </div>
                         </div>
                       ))}
@@ -345,6 +362,70 @@ export const EvaluationReviewPage = (): JSX.Element => {
           )}
         </div>
       </main>
+
+      <Dialog open={!!selectedEvaluation} onOpenChange={(open) => !open && setSelectedEvaluation(null)}>
+        <DialogContent className="sm:max-w-md border-zinc-200 bg-white dark:bg-zinc-950">
+          <DialogHeader className="border-b pb-4">
+            <DialogTitle className="text-2xl font-serif">Evaluation Detail</DialogTitle>
+          </DialogHeader>
+          {selectedEvaluation && (
+            <div className="space-y-6 py-4">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-12 rounded-full bg-zinc-100 flex items-center justify-center border border-zinc-200">
+                  <Users size={32} className="text-zinc-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-zinc-900">{selectedEvaluation.evaluatorName}</h3>
+                  <div className="flex items-center gap-2 text-zinc-500 text-sm">
+                    <Mail size={14} />
+                    <span>{selectedEvaluation.email}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-3 bg-zinc-50 rounded-lg border border-zinc-100">
+                  <p className="text-[10px] uppercase font-bold text-zinc-400 mb-1">Project</p>
+                  <p className="text-sm font-semibold">{selectedEvaluation.projectName}</p>
+                </div>
+                <div className="p-3 bg-zinc-50 rounded-lg border border-zinc-100">
+                  <p className="text-[10px] uppercase font-bold text-zinc-400 mb-1">Rating</p>
+                  <div className="flex gap-1">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star key={s} size={14} className={s <= selectedEvaluation.rating ? "fill-zinc-900 text-zinc-900" : "text-zinc-200"} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 bg-zinc-50 rounded-lg border border-zinc-100 min-h-[120px]">
+                <p className="text-[10px] uppercase font-bold text-zinc-400 mb-2">Comments / Feedback</p>
+                <p className="text-sm leading-relaxed text-zinc-700 italic">
+                  "{selectedEvaluation.feedback || "No additional comments provided."}"
+                </p>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setSelectedEvaluation(null)}
+                  className="rounded-full px-6"
+                >
+                  Close
+                </Button>
+                {selectedEvaluation.status === 'Pending' && (
+                  <Button 
+                    className="bg-[#83ffb3] hover:bg-[#6ae091] text-black font-bold rounded-full px-6"
+                    onClick={() => handleMarkAsReviewed(selectedEvaluation.id)}
+                  >
+                    Mark as Reviewed
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
