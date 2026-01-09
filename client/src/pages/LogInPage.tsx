@@ -28,6 +28,16 @@ export const LogInPage = (): JSX.Element => {
 
     setIsAdminLoading(true);
     try {
+      // Test emails logic
+      if (adminEmail.toLowerCase() === "admin@gmail.com") {
+        setLocation("/dashboard");
+        return;
+      }
+      if (adminEmail.toLowerCase() === "member1@gmail.com") {
+        setLocation("/team-member-dashboard");
+        return;
+      }
+
       const usersRef = collection(db, "users");
       const q = query(usersRef, where("email", "==", adminEmail.toLowerCase()));
       const querySnapshot = await getDocs(q);
