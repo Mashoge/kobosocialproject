@@ -57,7 +57,7 @@ export const DashboardPage = (): JSX.Element => {
       description: "Access evaluation, etc",
       bgColor: "bg-[#ff7d8e33]",
       icon: Settings,
-      path: "#",
+      path: "/evaluation-review",
     },
   ];
 
