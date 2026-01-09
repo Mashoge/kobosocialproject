@@ -113,37 +113,11 @@ export const LogInPage = (): JSX.Element => {
                 </div>
               </div>
 
-              <div className="w-full max-w-[354px] flex flex-col mt-2.5 gap-[5px]">
-                <Label
-                  htmlFor="admin-password"
-                  className="w-[101px] h-[27px] [font-family:'Playfair_Display',Helvetica] font-semibold text-black text-xl tracking-[0] leading-[26.6px] whitespace-nowrap"
-                >
-                  Password
-                </Label>
-
-                <div className="ml-[7px]">
-                  <Input
-                    id="admin-password"
-                    type="password"
-                    placeholder="Enter your password"
-                    className="w-[345px] h-[57px] bg-white rounded-[5px] border-[1.5px] border-solid border-[#8e8e8e] shadow-[0px_4px_4px_#00000040] text-center placeholder:opacity-35 placeholder:[font-family:'Playfair_Display',Helvetica] placeholder:font-semibold placeholder:text-black placeholder:text-base"
-                    disabled={isAdminLoading}
-                  />
-                </div>
-              </div>
-
-              <a
-                href="#"
-                className="w-[139px] h-6 mt-0.5 ml-[-215px] [font-family:'Playfair_Display',Helvetica] font-medium text-[#4089ff] text-base text-center tracking-[0] leading-[21.3px] whitespace-nowrap"
-              >
-                Forgot password?
-              </a>
-
               <Button 
                 type="submit"
                 disabled={isAdminLoading}
                 data-testid="button-admin-login"
-                className="w-[345px] h-[60px] mt-[15px] bg-[#4089ff] rounded-[10px] shadow-[0px_4px_4px_#00000040] hover:bg-[#4089ff]/90 [font-family:'Playfair_Display',Helvetica] font-semibold text-white text-2xl tracking-[0] leading-[31.9px]"
+                className="w-[345px] h-[60px] mt-[40px] bg-[#4089ff] rounded-[10px] shadow-[0px_4px_4px_#00000040] hover:bg-[#4089ff]/90 [font-family:'Playfair_Display',Helvetica] font-semibold text-white text-2xl tracking-[0] leading-[31.9px]"
               >
                 {isAdminLoading ? "Logging in..." : "Next"}
                 {!isAdminLoading && <ArrowRightIcon className="ml-2 w-5 h-5" />}
@@ -199,35 +173,10 @@ export const LogInPage = (): JSX.Element => {
               </div>
             </div>
 
-            <div className="w-full max-w-[354px] flex flex-col mt-2.5 gap-[5px]">
-              <Label
-                htmlFor="client-password"
-                className="w-[101px] h-[27px] [font-family:'Playfair_Display',Helvetica] font-semibold text-black text-xl tracking-[0] leading-[26.6px] whitespace-nowrap"
-              >
-                Password
-              </Label>
-
-              <div className="ml-[7px]">
-                <Input
-                  id="client-password"
-                  type="password"
-                  placeholder="Enter your password"
-                  className="w-[345px] h-[57px] bg-white rounded-[5px] border-[1.5px] border-solid border-[#8e8e8e] shadow-[0px_4px_4px_#00000040] text-center placeholder:opacity-35 placeholder:[font-family:'Playfair_Display',Helvetica] placeholder:font-semibold placeholder:text-black placeholder:text-base"
-                />
-              </div>
-            </div>
-
-            <a
-              href="#"
-              className="w-[139px] h-6 mt-0.5 ml-[-215px] [font-family:'Playfair_Display',Helvetica] font-medium text-[#4089ff] text-base text-center tracking-[0] leading-[21.3px] whitespace-nowrap"
-            >
-              Forgot password?
-            </a>
-
             <Button 
               onClick={handleClientLogin}
               data-testid="button-client-login"
-              className="w-[345px] h-[60px] mt-[15px] bg-[#4089ff] rounded-[10px] shadow-[0px_4px_4px_#00000040] hover:bg-[#4089ff]/90 [font-family:'Playfair_Display',Helvetica] font-semibold text-white text-2xl tracking-[0] leading-[31.9px]"
+              className="w-[345px] h-[60px] mt-[40px] bg-[#4089ff] rounded-[10px] shadow-[0px_4px_4px_#00000040] hover:bg-[#4089ff]/90 [font-family:'Playfair_Display',Helvetica] font-semibold text-white text-2xl tracking-[0] leading-[31.9px]"
             >
               Next
               <ArrowRightIcon className="ml-2 w-5 h-5" />
