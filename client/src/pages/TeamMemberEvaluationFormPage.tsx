@@ -40,7 +40,7 @@ export const TeamMemberEvaluationFormPage = (): JSX.Element => {
     try {
       await createEvaluation({
         evaluatorName: formData.name,
-        evaluatorType: "team-member",
+        evaluatorType: "team",
         email: formData.email,
         projectName: formData.projectTitle,
         rating,

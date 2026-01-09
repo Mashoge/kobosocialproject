@@ -50,7 +50,7 @@ export const DashboardPage = (): JSX.Element => {
       description: "Assign task and role allocation for employees",
       bgColor: "bg-[#7dffff33]",
       icon: Users,
-      path: "#",
+      path: "/manage-roles",
     },
     {
       title: "Tools",

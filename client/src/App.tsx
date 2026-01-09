@@ -17,6 +17,7 @@ import { EvaluationReviewPage } from "./pages/EvaluationReviewPage";
 import { ClientEvaluationFormPage } from "@/pages/ClientEvaluationFormPage";
 import { TeamMemberDashboardPage } from "@/pages/TeamMemberDashboardPage";
 import { TeamMemberEvaluationFormPage } from "@/pages/TeamMemberEvaluationFormPage";
+import { ManageRolesPage } from "@/pages/ManageRolesPage";
 
 function Router() {
   return (
@@ -33,6 +34,7 @@ function Router() {
       <Route path="/team-member-dashboard" component={TeamMemberDashboardPage} />
       <Route path="/team-evaluation-form" component={TeamMemberEvaluationFormPage} />
       <Route path="/project-requests" component={ProjectRequestsPage} />
+      <Route path="/manage-roles" component={ManageRolesPage} />
       <Route path="/evaluation-review" component={EvaluationReviewPage} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
