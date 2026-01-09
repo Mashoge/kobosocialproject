@@ -43,7 +43,7 @@ export const ClientDashboardPage = (): JSX.Element => {
       description: "Evaluate Post-Project Results",
       bgColor: "bg-green-200",
       icon: CheckSquare,
-      path: "#",
+      path: "/client-evaluation-form",
     },
   ];
 
