@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Home, Users, MessageSquare, LogOut, Search, Filter, Plus, MoreHorizontal } from "lucide-react";
+import { Home, Users, MessageSquare, LogOut, Search, Filter, Plus, MoreHorizontal, CheckCircle2 } from "lucide-react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -11,8 +11,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { getAllTeamMembers, updateUserRole, updateUserStatus } from "@/services/userRolesService";
+import { updateAssignedTasks, getTeamMemberByEmail } from "@/services/teamMemberService";
 
 export const ManageRolesPage = (): JSX.Element => {
   const [, setLocation] = useLocation();
@@ -20,6 +30,9 @@ export const ManageRolesPage = (): JSX.Element => {
   const [users, setUsers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [newTask, setNewTask] = useState("");
+  const [isAssigning, setIsAssigning] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -59,6 +72,37 @@ export const ManageRolesPage = (): JSX.Element => {
       fetchUsers();
     } catch (error) {
       toast({ title: "Error", description: "Failed to update status", variant: "destructive" });
+    }
+  };
+
+  const handleAssignTask = async () => {
+    if (!selectedUser || !newTask.trim()) return;
+    
+    setIsAssigning(true);
+    try {
+      const memberData = await getTeamMemberByEmail(selectedUser.id);
+      const currentTasks = memberData?.assignedTasks || [];
+      const updatedTasks = [...currentTasks, newTask.trim()];
+      
+      await updateAssignedTasks(selectedUser.id, updatedTasks);
+      
+      toast({
+        title: "Task Assigned",
+        description: `Successfully assigned task to ${selectedUser.id}`,
+      });
+      
+      setNewTask("");
+      setSelectedUser(null);
+      fetchUsers();
+    } catch (error) {
+      console.error("Error assigning task:", error);
+      toast({
+        title: "Error",
+        description: "Failed to assign task",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAssigning(false);
     }
   };
 
@@ -188,10 +232,39 @@ export const ManageRolesPage = (): JSX.Element => {
                   <div className="text-center text-gray-600 font-medium">
                     {user.tasksCount || 0} Tasks
                   </div>
-                  <div>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal size={20} />
-                    </Button>
+                  <div className="flex justify-end">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="ghost" size="icon" onClick={() => setSelectedUser(user)}>
+                          <Plus size={20} className="text-blue-600" />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle className="font-playfair">Assign Task</DialogTitle>
+                          <DialogDescription>
+                            Add a new project or task for {user.email}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="py-4">
+                          <Input
+                            placeholder="Project Name or Task Description"
+                            value={newTask}
+                            onChange={(e) => setNewTask(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleAssignTask()}
+                          />
+                        </div>
+                        <DialogFooter>
+                          <Button 
+                            onClick={handleAssignTask} 
+                            disabled={isAssigning || !newTask.trim()}
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                          >
+                            {isAssigning ? "Assigning..." : "Assign Task"}
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 </div>
               ))

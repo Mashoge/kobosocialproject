@@ -24,7 +24,7 @@ export async function addTeamMember(member: TeamMemberData) {
   await addDoc(teamMembersCollection, member);
 }
 
-// Update assigned tasks
+// Update assigned tasks and sync count to users collection
 export async function updateAssignedTasks(email: string, tasks: string[]) {
   const q = query(
     teamMembersCollection,
@@ -34,7 +34,19 @@ export async function updateAssignedTasks(email: string, tasks: string[]) {
   if (!snapshot.empty) {
     const memberRef = doc(db, "team_members", snapshot.docs[0].id);
     await updateDoc(memberRef, { assignedTasks: tasks });
+  } else {
+    // Create if doesn't exist
+    await addDoc(teamMembersCollection, {
+      email: email.toLowerCase(),
+      assignedTasks: tasks,
+      active: true,
+      role: "team-member"
+    });
   }
+  
+  // Sync tasksCount to users collection for Manage Roles UI
+  const userRef = doc(db, "users", email);
+  await updateDoc(userRef, { tasksCount: tasks.length });
 }
 
 // Get all team members

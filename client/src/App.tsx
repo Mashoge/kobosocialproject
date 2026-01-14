@@ -18,6 +18,7 @@ import { ClientEvaluationFormPage } from "@/pages/ClientEvaluationFormPage";
 import { TeamMemberDashboardPage } from "@/pages/TeamMemberDashboardPage";
 import { TeamMemberEvaluationFormPage } from "@/pages/TeamMemberEvaluationFormPage";
 import { ManageRolesPage } from "@/pages/ManageRolesPage";
+import { TeamMemberViewPage } from "@/pages/TeamMemberViewPage";
 
 function Router() {
   return (
@@ -33,6 +34,7 @@ function Router() {
       <Route path="/client-evaluation-form" component={ClientEvaluationFormPage} />
       <Route path="/team-member-dashboard" component={TeamMemberDashboardPage} />
       <Route path="/team-evaluation-form" component={TeamMemberEvaluationFormPage} />
+      <Route path="/team-member-view" component={TeamMemberViewPage} />
       <Route path="/project-requests" component={ProjectRequestsPage} />
       <Route path="/manage-roles" component={ManageRolesPage} />
       <Route path="/evaluation-review" component={EvaluationReviewPage} />

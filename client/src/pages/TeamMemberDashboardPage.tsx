@@ -1,4 +1,4 @@
-import { Home, MessageSquare, FolderPlus, LogOut, Settings } from "lucide-react";
+import { Home, MessageSquare, FolderPlus, LogOut, Settings, Briefcase } from "lucide-react";
 import { useLocation } from "wouter";
 
 export const TeamMemberDashboardPage = (): JSX.Element => {
@@ -29,6 +29,13 @@ export const TeamMemberDashboardPage = (): JSX.Element => {
       bgColor: "bg-[#ff7d8e33]",
       icon: Settings,
       path: "/team-evaluation-form",
+    },
+    {
+      title: "My Profile",
+      description: "View your assigned tasks and status",
+      bgColor: "bg-[#54aafb33]",
+      icon: Briefcase,
+      path: "/team-member-view",
     },
   ];
 

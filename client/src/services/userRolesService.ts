@@ -46,3 +46,9 @@ export async function updateUserStatus(
   const userRef = doc(db, "users", email);
   await updateDoc(userRef, { status });
 }
+
+// Assign task count to user
+export async function updateUserTaskCount(email: string, count: number) {
+  const userRef = doc(db, "users", email);
+  await updateDoc(userRef, { tasksCount: count });
+}
