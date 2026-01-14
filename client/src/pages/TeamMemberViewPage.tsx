@@ -16,7 +16,7 @@ export const TeamMemberViewPage = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
 
   // In a real app, this would come from auth context
-  const userEmail = "member1@gmail.com"; 
+  const userEmail = "member1@gmail.com";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,18 +63,29 @@ export const TeamMemberViewPage = (): JSX.Element => {
     <div className="bg-[#f5f5f5] w-full min-h-screen flex flex-col font-sans">
       <header className="w-full h-[85px] bg-[rgba(217,207,199,0.85)] shadow-lg flex items-center justify-between px-10">
         <div className="bg-white px-6 py-2 rounded-full">
-          <span className="text-black text-xl font-semibold font-playfair uppercase">Member View</span>
+          <span className="text-black text-xl font-semibold font-playfair uppercase">
+            TEAM MEMBER
+          </span>
         </div>
         <div className="flex gap-8 items-center">
-          <button onClick={() => setLocation("/team-member-dashboard")} className="flex items-center gap-2 cursor-pointer hover:opacity-70">
+          <button
+            onClick={() => setLocation("/team-member-dashboard")}
+            className="flex items-center gap-2 cursor-pointer hover:opacity-70"
+          >
             <Home size={24} />
             <span className="font-playfair">Home</span>
           </button>
-          <button onClick={() => setLocation("/message")} className="flex items-center gap-2 cursor-pointer hover:opacity-70">
+          <button
+            onClick={() => setLocation("/message")}
+            className="flex items-center gap-2 cursor-pointer hover:opacity-70"
+          >
             <MessageSquare size={24} />
             <span className="font-playfair">Message</span>
           </button>
-          <button onClick={handleLogout} className="flex items-center gap-2 cursor-pointer hover:opacity-70">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 cursor-pointer hover:opacity-70"
+          >
             <LogOut size={24} />
             <span className="font-playfair">Logout</span>
           </button>
@@ -82,7 +93,9 @@ export const TeamMemberViewPage = (): JSX.Element => {
       </header>
 
       <main className="flex-1 px-10 py-12 max-w-4xl mx-auto w-full">
-        <h1 className="text-4xl font-bold font-playfair mb-8">My Profile & Tasks</h1>
+        <h1 className="text-4xl font-bold font-playfair mb-8">
+          My Profile & Tasks
+        </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="bg-white shadow-sm border-gray-200">
@@ -105,11 +118,11 @@ export const TeamMemberViewPage = (): JSX.Element => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Badge 
+              <Badge
                 className={`px-3 py-1 text-sm ${
-                  userData?.status === 'Active' 
-                  ? 'bg-green-100 text-green-700 border-green-200' 
-                  : 'bg-red-100 text-red-700 border-red-200'
+                  userData?.status === "Active"
+                    ? "bg-green-100 text-green-700 border-green-200"
+                    : "bg-red-100 text-red-700 border-red-200"
                 }`}
                 variant="outline"
               >
@@ -134,17 +147,23 @@ export const TeamMemberViewPage = (): JSX.Element => {
 
         <Card className="bg-white shadow-sm border-gray-200">
           <CardHeader className="border-b border-gray-100 bg-gray-50/50">
-            <CardTitle className="font-playfair text-xl">Assigned Tasks & Projects</CardTitle>
+            <CardTitle className="font-playfair text-xl">
+              Assigned Tasks & Projects
+            </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
-            {!memberData?.assignedTasks || memberData.assignedTasks.length === 0 ? (
+            {!memberData?.assignedTasks ||
+            memberData.assignedTasks.length === 0 ? (
               <div className="p-12 text-center text-gray-500 italic font-playfair">
                 No tasks assigned yet. Check back later or contact your manager.
               </div>
             ) : (
               <div className="divide-y divide-gray-100">
                 {memberData.assignedTasks.map((task: string, index: number) => (
-                  <div key={index} className="p-4 flex items-center gap-4 hover:bg-gray-50 transition-colors">
+                  <div
+                    key={index}
+                    className="p-4 flex items-center gap-4 hover:bg-gray-50 transition-colors"
+                  >
                     <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
                       {index + 1}
                     </div>

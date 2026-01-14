@@ -34,6 +34,14 @@ export const ManageRolesPage = (): JSX.Element => {
   const [newTask, setNewTask] = useState("");
   const [isAssigning, setIsAssigning] = useState(false);
 
+  const DEPARTMENT_ROLES: Record<string, string[]> = {
+    "Creative Department": ["Creative Director", "Copywriter", "Art Director", "Graphic Designer"],
+    "Media Department": ["Media Planner", "Media Buyer", "Social Media Manager"],
+    "Project Management": ["Project Manager", "Assistant Project Manager"],
+    "Operations": ["Operations Manager", "Finance Officer"],
+    "IT / Development": ["Developer", "Systems Admin", "Security Engineer"]
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -54,9 +62,24 @@ export const ManageRolesPage = (): JSX.Element => {
     }
   };
 
-  const handleRoleChange = async (email: string, newRole: string) => {
+  const handleDepartmentChange = async (email: string, newDept: string) => {
     try {
-      await updateUserRole(email, newRole);
+      // When department changes, default to the first role in that department
+      const defaultRole = DEPARTMENT_ROLES[newDept][0];
+      await updateUserRole(email, defaultRole, newDept);
+      toast({ 
+        title: "Department Updated", 
+        description: `User moved to ${newDept} as ${defaultRole}` 
+      });
+      fetchUsers();
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to update department", variant: "destructive" });
+    }
+  };
+
+  const handleRoleChange = async (email: string, newRole: string, dept: string) => {
+    try {
+      await updateUserRole(email, newRole, dept);
       toast({ title: "Role Updated", description: `User role changed to ${newRole}` });
       fetchUsers();
     } catch (error) {
@@ -178,9 +201,9 @@ export const ManageRolesPage = (): JSX.Element => {
         </div>
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          <div className="grid grid-cols-[1fr_150px_150px_150px_50px] gap-4 px-6 py-4 bg-gray-50 border-b border-gray-200 text-sm font-semibold text-gray-600">
+          <div className="grid grid-cols-[1fr_260px_150px_120px_50px] gap-4 px-6 py-4 bg-gray-50 border-b border-gray-200 text-sm font-semibold text-gray-600">
             <div>NAME</div>
-            <div className="text-center">ROLE</div>
+            <div className="text-center">DEPARTMENT & ROLE</div>
             <div className="text-center">STATUS</div>
             <div className="text-center">TASKS</div>
             <div></div>
@@ -193,7 +216,7 @@ export const ManageRolesPage = (): JSX.Element => {
               <div className="p-8 text-center text-gray-500">No users found.</div>
             ) : (
               filteredUsers.map((user) => (
-                <div key={user.id} className="grid grid-cols-[1fr_150px_150px_150px_50px] gap-4 px-6 py-4 items-center hover:bg-gray-50 transition-colors">
+                <div key={user.id} className="grid grid-cols-[1fr_260px_150px_120px_50px] gap-4 px-6 py-4 items-center hover:bg-gray-50 transition-colors">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
                       {user.email?.[0].toUpperCase()}
@@ -203,19 +226,34 @@ export const ManageRolesPage = (): JSX.Element => {
                       <div className="text-sm text-gray-500">{user.email}</div>
                     </div>
                   </div>
-                  <div className="flex justify-center">
+                  <div className="flex justify-center gap-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="w-24 capitalize">
-                          {user.role || "Viewer"}
+                        <Button variant="outline" size="sm" className="w-32 truncate text-xs">
+                          {user.department || "Select Dept"}
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => handleRoleChange(user.id, "admin")}>Admin</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleRoleChange(user.id, "project-manager")}>Project Manager</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleRoleChange(user.id, "team-member")}>Team Member</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleRoleChange(user.id, "editor")}>Editor</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleRoleChange(user.id, "viewer")}>Viewer</DropdownMenuItem>
+                        {Object.keys(DEPARTMENT_ROLES).map((dept) => (
+                          <DropdownMenuItem key={dept} onClick={() => handleDepartmentChange(user.id, dept)}>
+                            {dept}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild disabled={!user.department}>
+                        <Button variant="outline" size="sm" className="w-32 truncate text-xs">
+                          {user.role || "Select Role"}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        {user.department && DEPARTMENT_ROLES[user.department]?.map((role: string) => (
+                          <DropdownMenuItem key={role} onClick={() => handleRoleChange(user.id, role, user.department)}>
+                            {role}
+                          </DropdownMenuItem>
+                        ))}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>

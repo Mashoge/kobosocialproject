@@ -32,10 +32,14 @@ export async function getAllTeamMembers() {
   }));
 }
 
-// Update user role
-export async function updateUserRole(email: string, role: string) {
+// Update user role and department
+export async function updateUserRole(email: string, role: string, department?: string) {
   const userRef = doc(db, "users", email);
-  await updateDoc(userRef, { role });
+  const updateData: any = { role };
+  if (department) {
+    updateData.department = department;
+  }
+  await updateDoc(userRef, updateData);
 }
 
 // Activate / Deactivate user
