@@ -228,7 +228,7 @@ export const ManageRolesPage = (): JSX.Element => {
                   </div>
                   <div className="flex justify-center gap-2">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger asChild disabled={user.role === 'Admin'}>
                         <Button variant="outline" size="sm" className="w-32 truncate text-xs">
                           {user.department || "Select Dept"}
                         </Button>
@@ -243,7 +243,7 @@ export const ManageRolesPage = (): JSX.Element => {
                     </DropdownMenu>
 
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild disabled={!user.department}>
+                      <DropdownMenuTrigger asChild disabled={!user.department || user.role === 'Admin'}>
                         <Button variant="outline" size="sm" className="w-32 truncate text-xs">
                           {user.role || "Select Role"}
                         </Button>
