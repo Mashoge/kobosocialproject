@@ -35,7 +35,7 @@ export const ManageRolesPage = (): JSX.Element => {
   const [isAssigning, setIsAssigning] = useState(false);
 
   const DEPARTMENT_ROLES: Record<string, string[]> = {
-    "Creative Department": ["Creative Director", "Copywriter", "Art Director", "Graphic Designer"],
+    "Creative Department": ["Creative Director", "Copywriter", "Art Director", "Graphic Designer", "Video Editor"],
     "Media Department": ["Media Planner", "Media Buyer", "Social Media Manager"],
     "Project Management": ["Project Manager", "Assistant Project Manager"],
     "Operations": ["Operations Manager", "Finance Officer"],
