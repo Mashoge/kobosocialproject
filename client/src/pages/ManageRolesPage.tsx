@@ -104,7 +104,7 @@ export const ManageRolesPage = (): JSX.Element => {
     setIsAssigning(true);
     try {
       const memberData = await getTeamMemberByEmail(selectedUser.id);
-      const currentTasks = memberData?.assignedTasks || [];
+      const currentTasks = (memberData as any)?.assignedTasks || [];
       const updatedTasks = [...currentTasks, newTask.trim()];
       
       await updateAssignedTasks(selectedUser.id, updatedTasks);
