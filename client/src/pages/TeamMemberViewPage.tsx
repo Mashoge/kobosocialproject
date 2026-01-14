@@ -97,7 +97,20 @@ export const TeamMemberViewPage = (): JSX.Element => {
           My Profile & Tasks
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card className="bg-white shadow-sm border-gray-200">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2 uppercase tracking-wider">
+                <Info size={16} /> Department
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold font-playfair">
+                {userData?.department || "Unassigned"}
+              </p>
+            </CardContent>
+          </Card>
+
           <Card className="bg-white shadow-sm border-gray-200">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2 uppercase tracking-wider">
