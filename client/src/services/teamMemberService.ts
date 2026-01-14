@@ -12,9 +12,16 @@ import {
 
 const teamMembersCollection = collection(db, "team_members");
 
+export interface AssignedTask {
+  projectName: string;
+  taskName: string;
+  description: string;
+  assignedAt: string;
+}
+
 export interface TeamMemberData {
   email: string;
-  assignedTasks: string[]; // array of task IDs or project IDs
+  assignedTasks: AssignedTask[]; // array of detailed task objects
   role: string; // optional
   active: boolean;
 }
@@ -25,7 +32,7 @@ export async function addTeamMember(member: TeamMemberData) {
 }
 
 // Update assigned tasks and sync count to users collection
-export async function updateAssignedTasks(email: string, tasks: string[]) {
+export async function updateAssignedTasks(email: string, tasks: AssignedTask[]) {
   const q = query(
     teamMembersCollection,
     where("email", "==", email.toLowerCase()),

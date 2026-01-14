@@ -31,7 +31,11 @@ export const ManageRolesPage = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [newTask, setNewTask] = useState("");
+  const [taskData, setTaskData] = useState({
+    projectName: "",
+    taskName: "",
+    description: ""
+  });
   const [isAssigning, setIsAssigning] = useState(false);
 
   const DEPARTMENT_ROLES: Record<string, string[]> = {
@@ -99,22 +103,26 @@ export const ManageRolesPage = (): JSX.Element => {
   };
 
   const handleAssignTask = async () => {
-    if (!selectedUser || !newTask.trim()) return;
+    if (!selectedUser || !taskData.projectName.trim() || !taskData.taskName.trim()) return;
     
     setIsAssigning(true);
     try {
       const memberData = await getTeamMemberByEmail(selectedUser.id);
       const currentTasks = (memberData as any)?.assignedTasks || [];
-      const updatedTasks = [...currentTasks, newTask.trim()];
+      const newTask = {
+        ...taskData,
+        assignedAt: new Date().toISOString()
+      };
+      const updatedTasks = [...currentTasks, newTask];
       
       await updateAssignedTasks(selectedUser.id, updatedTasks);
       
       toast({
         title: "Task Assigned",
-        description: `Successfully assigned task to ${selectedUser.id}`,
+        description: `Successfully assigned ${taskData.taskName} to ${selectedUser.id}`,
       });
       
-      setNewTask("");
+      setTaskData({ projectName: "", taskName: "", description: "" });
       setSelectedUser(null);
       fetchUsers();
     } catch (error) {
@@ -284,18 +292,36 @@ export const ManageRolesPage = (): JSX.Element => {
                             Add a new project or task for {user.email}
                           </DialogDescription>
                         </DialogHeader>
-                        <div className="py-4">
-                          <Input
-                            placeholder="Project Name or Task Description"
-                            value={newTask}
-                            onChange={(e) => setNewTask(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleAssignTask()}
-                          />
+                        <div className="py-4 space-y-4">
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Project Name</label>
+                            <Input
+                              placeholder="e.g. Website Redesign"
+                              value={taskData.projectName}
+                              onChange={(e) => setTaskData({...taskData, projectName: e.target.value})}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Task Name</label>
+                            <Input
+                              placeholder="e.g. Homepage Hero Section"
+                              value={taskData.taskName}
+                              onChange={(e) => setTaskData({...taskData, taskName: e.target.value})}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Description</label>
+                            <Input
+                              placeholder="Brief task overview..."
+                              value={taskData.description}
+                              onChange={(e) => setTaskData({...taskData, description: e.target.value})}
+                            />
+                          </div>
                         </div>
                         <DialogFooter>
                           <Button 
                             onClick={handleAssignTask} 
-                            disabled={isAssigning || !newTask.trim()}
+                            disabled={isAssigning || !taskData.projectName.trim() || !taskData.taskName.trim()}
                             className="bg-blue-600 hover:bg-blue-700 text-white"
                           >
                             {isAssigning ? "Assigning..." : "Assign Task"}

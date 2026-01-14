@@ -177,10 +177,22 @@ export const TeamMemberViewPage = (): JSX.Element => {
                     key={index}
                     className="p-4 flex items-center gap-4 hover:bg-gray-50 transition-colors"
                   >
-                    <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
+                    <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm shrink-0">
                       {index + 1}
                     </div>
-                    <span className="font-medium text-gray-700">{task}</span>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-bold text-gray-900">{task.projectName}</span>
+                        <span className="text-gray-300">|</span>
+                        <span className="font-medium text-blue-600">{task.taskName}</span>
+                      </div>
+                      <p className="text-gray-600 text-sm">{task.description}</p>
+                      {task.assignedAt && (
+                        <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">
+                          Assigned: {new Date(task.assignedAt).toLocaleDateString()}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
