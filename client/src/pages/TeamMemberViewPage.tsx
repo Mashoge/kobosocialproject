@@ -182,14 +182,14 @@ export const TeamMemberViewPage = (): JSX.Element => {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-bold text-gray-900">{task.projectName}</span>
+                        <span className="font-bold text-gray-900">{(task as any).projectName}</span>
                         <span className="text-gray-300">|</span>
-                        <span className="font-medium text-blue-600">{task.taskName}</span>
+                        <span className="font-medium text-blue-600">{(task as any).taskName}</span>
                       </div>
-                      <p className="text-gray-600 text-sm">{task.description}</p>
-                      {task.assignedAt && (
+                      <p className="text-gray-600 text-sm">{(task as any).description}</p>
+                      {(task as any).assignedAt && (
                         <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">
-                          Assigned: {new Date(task.assignedAt).toLocaleDateString()}
+                          Assigned: {new Date((task as any).assignedAt).toLocaleDateString()}
                         </p>
                       )}
                     </div>

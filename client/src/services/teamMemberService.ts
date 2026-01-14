@@ -21,8 +21,8 @@ export interface AssignedTask {
 
 export interface TeamMemberData {
   email: string;
-  assignedTasks: AssignedTask[]; // array of detailed task objects
-  role: string; // optional
+  assignedTasks: AssignedTask[];
+  role: string;
   active: boolean;
 }
 
